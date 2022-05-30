@@ -108,8 +108,7 @@ RUN apt-get update -y && apt-get install -y \
 #ENV PYENV_ROOT="/root/.pyenv"
 #ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
 
-# CMake
-# PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
+# CMake Compiler
 ENV CMAKE_ROOT=root/cmake
 RUN wget -q https://github.com/Kitware/CMake/releases/download/v3.22.1/cmake-3.22.1-linux-aarch64.tar.gz \
  && tar -xf cmake-3.22.1-linux-aarch64.tar.gz \
