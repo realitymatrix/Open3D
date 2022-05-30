@@ -76,7 +76,6 @@ HOST_OPEN3D_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. >/dev/null 2>&1 && pw
 CCACHE_VERSION=4.3
 CMAKE_VERSION=cmake-3.20.6-linux-x86_64
 CMAKE_VERSION_AARCH64=cmake-3.22.1-linux-aarch64
-CMAKE_VER_NUMBERS_AARCH64=v3.22.1
 
 print_usage_and_exit_docker_build() {
     echo "$__usage_docker_build"
@@ -107,7 +106,6 @@ openblas_export_env() {
         export DOCKER_TAG=open3d-ci:openblas-arm64
         export BASE_IMAGE=nvcr.io/nvidia/l4t-base:r32.6.1
         export CMAKE_VERSION=${CMAKE_VERSION_AARCH64}
-        export CMAKE_VER_NUMBERS_AARCH64=${CMAKE_VER_NUMBERS_AARCH64}
         export CCACHE_TAR_NAME=open3d-ci-openblas-arm64
     else
         echo "Invalid platform."
