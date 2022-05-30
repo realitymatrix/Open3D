@@ -2,7 +2,7 @@
 
 if [ $(id -u) = 0 ]; then
     update-mime-database /usr/share/mime # add new MIME types
-    update-desktop-database # associate MIME -> app
+#    update-desktop-database # associate MIME -> app
     gtk-update-icon-cache /usr/share/icons/hicolor || true
 else
     update-mime-database ~/.local/share/mime # add new MIME types
