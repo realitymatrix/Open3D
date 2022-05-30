@@ -105,7 +105,7 @@ RUN apt-get update -y && apt-get install -y \
 
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
-RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER_NUMBERS_AARCH64}/${CMAKE_VERSION}.tar.gz \
+RUN wget -q https://github.com/Kitware/CMake/releases/download/${CMAKE_VER_NUMBERS_AARCH64}/${CMAKE_VERSION}.tar.gz \
  && tar -xf ${CMAKE_VERSION}.tar.gz \
  && cp -ar ${CMAKE_VERSION} ${HOME}
 ENV PATH=${HOME}/${CMAKE_VERSION}/bin:${PATH}
