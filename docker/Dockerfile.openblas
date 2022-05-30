@@ -103,11 +103,13 @@ RUN apt-get update -y && apt-get install -y \
 #ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
 
 # CMake
-# PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
-RUN wget -q https://github.com/Kitware/CMake/releases/download/v3.22.1/${CMAKE_VERSION}.tar.gz \
- && tar -xf ${CMAKE_VERSION}.tar.gz \
- && cp -ar ${CMAKE_VERSION} ${HOME}
-ENV PATH=${HOME}/${CMAKE_VERSION}/bin:${PATH}
+# CMake Compiler
+ENV CMAKE_ROOT=root/cmake
+RUN wget -q https://github.com/Kitware/CMake/releases/download/v3.22.1/cmake-3.22.1-linux-aarch64.tar.gz \
+ && tar -xf cmake-3.22.1-linux-aarch64.tar.gz \
+ && cp -ar cmake-3.22.1-linux-aarch64 ${HOME}
+ENV PATH=${HOME}/cmake-3.22.1-linux-aarch64/bin:${PATH}
+RUN cmake --version
 
 # Open3D C++ dependencies
 # Done before copying the full Open3D directory for better Docker caching
