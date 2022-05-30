@@ -182,4 +182,4 @@ RUN ccache -s \
  && tar -czf ${CCACHE_TAR_NAME}.tar.gz ${CCACHE_DIR_NAME} \
  && mv ${CCACHE_TAR_NAME}.tar.gz /
 
- CMD python -c "import open3d; print(open3d.__version__)"
+RUN python -c "import open3d; print(open3d.__version__)"
