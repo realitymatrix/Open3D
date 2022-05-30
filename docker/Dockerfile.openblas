@@ -5,6 +5,12 @@ FROM ${BASE_IMAGE}
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
 
+# Needed for wget
+RUN apt-get update && apt-get install -y \
+        sudo \
+        ca-certificates
+RUN sudo update-ca-certificates -f
+
 # Required build args, should be specified in docker_build.sh
 ARG CMAKE_VERSION
 ARG CCACHE_TAR_NAME
@@ -111,11 +117,12 @@ RUN apt-get update -y && apt-get install -y \
 
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
-RUN CMAKE_VER_NUMBERS=$(echo "${CMAKE_VERSION}" | cut -d"-" -f2) \
-wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER_NUMBERS}/${CMAKE_VERSION}.tar.gz \
- && tar -xf ${CMAKE_VERSION}.tar.gz \
- && cp -a -r ${CMAKE_VERSION} ${HOME}
+ENV CMAKE_VER_NUM=v3.22.1
+RUN wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.22.1/${CMAKE_VERSION}.tar.gz \
+        && tar -xf ${CMAKE_VERSION}.tar.gz \
+        && cp -a -r ${CMAKE_VERSION} ${HOME}
 ENV PATH=${HOME}/${CMAKE_VERSION}/bin:${PATH}
+RUN cmake --version
 
 # Open3D C++ dependencies
 # Done before copying the full Open3D directory for better Docker caching
@@ -162,3 +169,5 @@ RUN ccache -s \
  && cd ${CCACHE_DIR_PARENT} \
  && tar -czf ${CCACHE_TAR_NAME}.tar.gz ${CCACHE_DIR_NAME} \
  && mv ${CCACHE_TAR_NAME}.tar.gz /
+
+ RUN python3 -c "import open3d; print(open3d.__version__)"
