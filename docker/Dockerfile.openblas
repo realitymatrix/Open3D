@@ -135,6 +135,18 @@ RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
 COPY . /root/Open3D
 WORKDIR /root/Open3D
 
+# No virtual environment is needed, default to python 3.6
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-tornado \
+    python3-setuptools \
+ && rm -rf /var/lib/apt/lists/*
+RUN ln -s /usr/bin/python3 /usr/local/bin/python \
+ && ln -s /usr/bin/python3-config /usr/local/bin/python-config \
+ && ln -s /usr/bin/pip3 /usr/local/bin/pip
+
 # Build Python wheel
 #RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
 #RUN pyenv local $(pyenv versions | grep ${PYTHON_VERSION})
