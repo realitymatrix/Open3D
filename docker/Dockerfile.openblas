@@ -39,6 +39,7 @@ ARG MAKEFLAGS=-j$(nproc)
 # libgomp1: available on Ubuntu ARM desktop by default
 RUN apt-get update && apt-get install -y \
     wget \
+    curl \
     libgl1 \
     libgomp1 \
  && rm -rf /var/lib/apt/lists/*
