@@ -180,7 +180,7 @@ RUN npm install -g \
 RUN mkdir build \
  && cd build \
  && cmake \
-    -DBUILD_UNIT_TESTS=ON \
+    -DBUILD_UNIT_TESTS=OFF \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     -DDEVELOPER_BUILD=${DEVELOPER_BUILD} \
