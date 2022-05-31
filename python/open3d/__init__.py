@@ -101,8 +101,8 @@ if int(sys.version_info[0]) < 3:
 
 if _build_config["BUILD_JUPYTER_EXTENSION"]:
     import platform
-    if not (platform.machine().startswith("arm") or
-            platform.machine().startswith("aarch")):
+    if (platform.machine().startswith("arm") or
+        platform.machine().startswith("aarch")):
         try:
             shell = get_ipython().__class__.__name__
             if shell == 'ZMQInteractiveShell':
