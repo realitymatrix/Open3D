@@ -93,7 +93,7 @@ download_webrtc_sources() {
     echo Get WebRTC
     mkdir webrtc
     cd webrtc
-    fetch --nohooks webrtc
+    fetch --nohooks webrtc -y
 
     # Checkout to a specific version
     # Ref: https://chromium.googlesource.com/chromium/src/+/master/docs/building_old_revisions.md
