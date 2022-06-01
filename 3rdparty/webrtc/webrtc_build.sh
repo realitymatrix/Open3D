@@ -42,7 +42,8 @@ DEPOT_TOOLS_COMMIT=${DEPOT_TOOLS_COMMIT:-e1a98941d3ab10549be6d82d0686bb0fb91ec90
 GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
-export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
+#export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
+export PATH="/depot_tools":${PATH}
 echo ${PATH}
 #export DEPOT_TOOLS_UPDATE=0
 
@@ -83,7 +84,7 @@ install_dependencies_ubuntu() {
 
 download_webrtc_sources() {
     # PWD=Open3D
-    pushd ..
+    cd /
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
     command -V fetch
@@ -91,7 +92,7 @@ download_webrtc_sources() {
     echo Get WebRTC
     mkdir webrtc
     cd webrtc
-    sudo fetch webrtc
+    fetch webrtc
 
     # Checkout to a specific version
     # Ref: https://chromium.googlesource.com/chromium/src/+/master/docs/building_old_revisions.md
