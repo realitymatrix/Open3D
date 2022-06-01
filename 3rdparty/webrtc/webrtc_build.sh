@@ -39,11 +39,11 @@ WEBRTC_COMMIT=${WEBRTC_COMMIT:-60e674842ebae283cc6b2627f4b6f2f8186f3317}
 # Date: Wed Apr 7 21:35:29 2021 +0000
 DEPOT_TOOLS_COMMIT=${DEPOT_TOOLS_COMMIT:-e1a98941d3ab10549be6d82d0686bb0fb91ec903}
 
-GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-0}
+GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
-export DEPOT_TOOLS_UPDATE=0
+export DEPOT_TOOLS_UPDATE=1
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
