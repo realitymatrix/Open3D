@@ -13,7 +13,7 @@
 #   - docker run --rm --entrypoint cat open3d-webrtc:abi1 \
 #       webrtc_60e6748_cxx-abi-1.tar.gz > webrtc_60e6748_cxx-abi-1.tar.gz
 
-FROM arm64v8/ubuntu:18.04
+FROM nvcr.io/nvidia/l4t-base:r32.6.1
 
 ARG SUDO=command
 COPY Open3D/3rdparty/webrtc Open3D/3rdparty/webrtc
