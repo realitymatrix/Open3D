@@ -84,7 +84,6 @@ download_webrtc_sources() {
     pushd ..
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
-    git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
     command -V fetch
 
     echo Get WebRTC
