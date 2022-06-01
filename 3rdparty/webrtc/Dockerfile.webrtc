@@ -16,10 +16,10 @@
 FROM nvcr.io/nvidia/l4t-base:r32.6.1
 
 ARG SUDO=command
-COPY Open3D/3rdparty/webrtc Open3D/3rdparty/webrtc
-WORKDIR ./Open3D/
+COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
+WORKDIR /Open3D/
 
-RUN bash -c "chmod 755 /3rdparty/webrtc/webrtc_build.sh"
+RUN bash -c "chmod 755 /Open3D/3rdparty/webrtc/webrtc_build.sh"
 
 RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && install_dependencies_ubuntu purge-cache"
 RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && download_webrtc_sources"
