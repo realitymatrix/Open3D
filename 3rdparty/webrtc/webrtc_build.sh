@@ -90,6 +90,7 @@ download_webrtc_sources() {
     chmod 777 /depot_tools/fetch
     chmod 777 /depot_tools/vpython3
     chmod 777 /depot_tools/cipd
+    chmod 777 /depot_tools/gclient
     command -V fetch
 
     echo Get WebRTC
