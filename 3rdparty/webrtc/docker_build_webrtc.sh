@@ -1,0 +1,1 @@
+sudo docker build --build-arg GLIBCXX_USE_CXX11_ABI=1 -t open3d-webrtc:abi1 -f ./Dockerfile.webrtc .
