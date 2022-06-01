@@ -43,7 +43,7 @@ GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
-export DEPOT_TOOLS_UPDATE=1
+export DEPOT_TOOLS_UPDATE=0
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -83,7 +83,7 @@ download_webrtc_sources() {
     # PWD=Open3D
     pushd ..
     echo Get depot_tools
-    git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+    git clone https://github.com/realitymatrix/depot_tools.git
     git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
     command -V fetch
 
