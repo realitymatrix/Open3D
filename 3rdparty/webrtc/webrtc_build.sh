@@ -45,7 +45,7 @@ SUDO=${SUDO:-sudo}                           # Set to command if running inside 
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
 export PATH="/depot_tools":${PATH}
 echo ${PATH}
-export DEPOT_TOOLS_UPDATE=0
+export DEPOT_TOOLS_UPDATE=1
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
