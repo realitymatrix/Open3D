@@ -87,13 +87,13 @@ download_webrtc_sources() {
     cd /
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
-    chmod 755 /depot_tools/fetch
+    chmod 777 /depot_tools/fetch
     command -V fetch
 
     echo Get WebRTC
     mkdir webrtc
     cd webrtc
-    fetch webrtc
+    fetch --no-hooks webrtc
 
     # Checkout to a specific version
     # Ref: https://chromium.googlesource.com/chromium/src/+/master/docs/building_old_revisions.md
