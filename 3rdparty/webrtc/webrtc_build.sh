@@ -43,7 +43,8 @@ GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
-export DEPOT_TOOLS_UPDATE=0
+echo ${PATH}
+#export DEPOT_TOOLS_UPDATE=0
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -64,7 +65,8 @@ install_dependencies_ubuntu() {
         python-wheel \
         software-properties-common \
         tree \
-        curl
+        curl \
+        ninja-build
     curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - |
         $SUDO sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg' # Write to file, no stdout
@@ -89,7 +91,7 @@ download_webrtc_sources() {
     echo Get WebRTC
     mkdir webrtc
     cd webrtc
-    fetch webrtc
+    sudo fetch webrtc
 
     # Checkout to a specific version
     # Ref: https://chromium.googlesource.com/chromium/src/+/master/docs/building_old_revisions.md
