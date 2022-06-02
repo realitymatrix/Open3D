@@ -98,7 +98,6 @@ download_webrtc_sources() {
     chmod 755 /depot_tools/vpython3
     chmod 755 /depot_tools/cipd
     #command -V fetch
-    echo ${GCLIENT_PY3}
     vpython --version
     vpython pip install httplib2 --update
 
