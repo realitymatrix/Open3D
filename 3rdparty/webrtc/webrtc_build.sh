@@ -86,10 +86,6 @@ install_dependencies_ubuntu() {
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
     echo ${PATH}
-    python -m pip list
-    #python3 -m pip list
-    python -m pip install httplib2
-    #python3 -m pip install httplib2
 }
 
 download_webrtc_sources() {
@@ -102,6 +98,9 @@ download_webrtc_sources() {
     chmod 755 /depot_tools/vpython3
     chmod 755 /depot_tools/cipd
     #command -V fetch
+    echo ${GCLIENT_PY3}
+    vpython --version
+    vpython pip install httplib2 --update
 
     echo Get WebRTC
     mkdir webrtc
