@@ -81,11 +81,11 @@ install_dependencies_ubuntu() {
         $SUDO apt-get clean
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
-
+    chmod 755 /usr/bin/python
+    python -m pip install httplib2 --upgrade
     which python
     which python3
     python -m pip list
-    python3 -m pip list
 }
 
 download_webrtc_sources() {
