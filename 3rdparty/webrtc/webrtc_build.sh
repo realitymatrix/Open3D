@@ -50,7 +50,6 @@ export PATH="/depot_tools/python2-bin/python2":${PATH}
 export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
-export GCLIENT_PY3 = 1
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
