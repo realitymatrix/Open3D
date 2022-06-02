@@ -46,7 +46,7 @@ SUDO=${SUDO:-sudo}                           # Set to command if running inside 
 export PATH="/depot_tools":${PATH}
 export PATH="/usr/bin/python":${PATH}
 export PATH="/usr/bin/python3":${PATH}
-export DEPOT_TOOLS_UPDATE=0
+export DEPOT_TOOLS_UPDATE=1
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -92,7 +92,7 @@ download_webrtc_sources() {
     # PWD=Open3D
     cd /
     echo Get depot_tools
-    git clone https://github.com/realitymatrix/depot_tools.git
+    git clone https://chromium.googlesource.com/chromium/tools/depot_tools
     chmod -R 755 /depot_tools
     command -V fetch
 
