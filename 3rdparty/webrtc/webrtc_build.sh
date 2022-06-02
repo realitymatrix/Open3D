@@ -45,8 +45,8 @@ SUDO=${SUDO:-sudo}                           # Set to command if running inside 
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
 export DEPOT_TOOLS="/depot_tools"
 export PATH=${DEPOT_TOOLS}:${PATH}
-export PATH="/usr/bin/python":${PATH}
-export PATH="/usr/bin/python3":${PATH}
+export PATH="/depot_tools/python-bin/python3":${PATH}
+export PATH="/depot_tools/python2-bin/python2":${PATH}
 export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
