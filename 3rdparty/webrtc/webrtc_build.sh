@@ -50,7 +50,7 @@ export PATH="/depot_tools/python2-bin/python2":${PATH}
 export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
-export GCLIENT_PY3 == 0
+export GCLIENT_PY3=1
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -99,8 +99,8 @@ download_webrtc_sources() {
     chmod 755 /depot_tools/vpython3
     chmod 755 /depot_tools/cipd
     #command -V fetch
-    vpython --version
-    vpython pip install httplib2 --update
+    vpython3 --version
+    vpython3 pip install httplib2 --update
 
     echo Get WebRTC
     mkdir webrtc
