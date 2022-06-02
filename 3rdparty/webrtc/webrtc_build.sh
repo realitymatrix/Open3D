@@ -44,6 +44,7 @@ NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
 export PATH="/depot_tools":${PATH}
+export PATH="/usr/local/bin":$PATH
 echo ${PATH}
 export DEPOT_TOOLS_UPDATE=0
 
