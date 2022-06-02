@@ -50,6 +50,7 @@ export PATH="/depot_tools/python2-bin/python2":${PATH}
 export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
+export GCLIENT_PY3 == 0
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -86,9 +87,9 @@ install_dependencies_ubuntu() {
     fi
     echo ${PATH}
     python -m pip list
-    python3 -m pip list
+    #python3 -m pip list
     python -m pip install httplib2
-    python3 -m pip install httplib2
+    #python3 -m pip install httplib2
 }
 
 download_webrtc_sources() {
@@ -96,11 +97,9 @@ download_webrtc_sources() {
     cd /
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
-    chmod 755 /depot_tools/vpython
-    chmod 755 /depot_tools/vpython3
     chmod 755 /depot_tools/gclient
     chmod 755 /depot_tools/fetch
-    command -V fetch
+    #command -V fetch
 
     echo Get WebRTC
     mkdir webrtc
