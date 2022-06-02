@@ -82,7 +82,7 @@ install_dependencies_ubuntu() {
     fi
 
     which python3
-    pip list3
+    pip3 list
 }
 
 download_webrtc_sources() {
