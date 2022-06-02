@@ -44,7 +44,7 @@ NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
 export PATH="/depot_tools":${PATH}
-export PATH="/usr/bin/python":${PATH}
+export PATH="/usr/bin/python3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
 
 install_dependencies_ubuntu() {
@@ -82,7 +82,7 @@ install_dependencies_ubuntu() {
     fi
 
     which python3
-    pip list
+    pip list3
 }
 
 download_webrtc_sources() {
