@@ -45,9 +45,10 @@ SUDO=${SUDO:-sudo}                           # Set to command if running inside 
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
 export DEPOT_TOOLS="/depot_tools"
 export PATH=${DEPOT_TOOLS}:${PATH}
-#export PATH="/usr/bin/python":${PATH}
-#export PATH="/usr/bin/python3":${PATH}
-export PATH=${DEPOT_TOOLS}/vpython3:${PATH}
+export PATH="/usr/bin/python":${PATH}
+export PATH="/usr/bin/python3":${PATH}
+export PATH="/depot_tools/vpython":${PATH}
+export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
 export GCLIENT_PY3 = 1
 
@@ -84,7 +85,10 @@ install_dependencies_ubuntu() {
         $SUDO apt-get clean
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
-    vpython3 --version
+    echo ${PATH}
+    vpython -m pip list
+    vpython3 -m pip list
+    vpython -m pip install httplib2
     vpython3 -m pip install httplib2
 }
 
@@ -93,7 +97,10 @@ download_webrtc_sources() {
     cd /
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
+    chmod 755 /depot_tools/vpython
     chmod 755 /depot_tools/vpython3
+    chmod 755 /depot_tools/gclient
+    chmod 755 /depot_tools/fetch
     command -V fetch
 
     echo Get WebRTC
