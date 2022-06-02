@@ -90,7 +90,7 @@ install_dependencies_ubuntu() {
 
 download_webrtc_sources() {
     # PWD=Open3D
-    cd /
+    pushd ..
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
     chmod 755 /depot_tools/gclient
@@ -99,7 +99,6 @@ download_webrtc_sources() {
     chmod 755 /depot_tools/vpython3
     chmod 755 /depot_tools/cipd
     chmod 755 /depot_tools/download_from_google_storage
-    #command -V fetch
     vpython3 --version
     vpython3 -m pip install \
      httplib2 \
