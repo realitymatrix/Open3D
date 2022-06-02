@@ -100,7 +100,7 @@ download_webrtc_sources() {
     chmod 755 /depot_tools/cipd
     #command -V fetch
     vpython3 --version
-    vpython3 pip install httplib2 --update
+    vpython3 -m pip install httplib2 --update
 
     echo Get WebRTC
     mkdir webrtc
