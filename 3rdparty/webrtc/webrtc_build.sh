@@ -85,10 +85,10 @@ install_dependencies_ubuntu() {
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
     echo ${PATH}
-    vpython -m pip list
-    vpython3 -m pip list
-    vpython -m pip install httplib2
-    vpython3 -m pip install httplib2
+    python -m pip list
+    python3 -m pip list
+    python -m pip install httplib2
+    python3 -m pip install httplib2
 }
 
 download_webrtc_sources() {
