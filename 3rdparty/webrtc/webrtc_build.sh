@@ -51,6 +51,7 @@ install_dependencies_ubuntu() {
     # Dependencies
     # python*       : resolve ImportError: No module named pkg_resources
     # libglib2.0-dev: resolve pkg_config("glib")
+    which python
     $SUDO apt-get update
     $SUDO apt-get install -y \
         apt-transport-https \
@@ -63,7 +64,6 @@ install_dependencies_ubuntu() {
         python-pip \
         python-setuptools \
         python-wheel \
-        python-httplib2 \
         software-properties-common \
         tree \
         curl \
