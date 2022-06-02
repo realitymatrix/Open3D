@@ -87,7 +87,7 @@ download_webrtc_sources() {
     cd /
     echo Get depot_tools
     git clone https://github.com/realitymatrix/depot_tools.git
-    chmod -R 777 /depot_tools
+    chmod -R 755 /depot_tools
     command -V fetch
 
     echo Get WebRTC
