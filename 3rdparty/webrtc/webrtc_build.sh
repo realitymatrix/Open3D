@@ -43,10 +43,13 @@ GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
-export PATH="/depot_tools":${PATH}
+export DEPOT_TOOLS="/depot_tools"
+export PATH=${DEPOT_TOOLS}:${PATH}
 export PATH="/usr/bin/python":${PATH}
 export PATH="/usr/bin/python3":${PATH}
-export DEPOT_TOOLS_UPDATE=1
+export PATH=${DEPOT_TOOLS}/vpython3:${PATH}
+export DEPOT_TOOLS_UPDATE=0
+which vpython3
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -81,11 +84,6 @@ install_dependencies_ubuntu() {
         $SUDO apt-get clean
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
-    chmod 755 /usr/bin/python
-    python -m pip install httplib2 --upgrade
-    which python
-    which python3
-    python -m pip list
 }
 
 download_webrtc_sources() {
