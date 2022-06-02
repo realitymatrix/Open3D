@@ -80,6 +80,9 @@ install_dependencies_ubuntu() {
         $SUDO apt-get clean
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
+
+    which python3
+    pip list
 }
 
 download_webrtc_sources() {
