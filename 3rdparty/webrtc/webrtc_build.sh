@@ -49,7 +49,7 @@ export PATH=${DEPOT_TOOLS}:${PATH}
 #export PATH="/usr/bin/python3":${PATH}
 export PATH=${DEPOT_TOOLS}/vpython3:${PATH}
 export DEPOT_TOOLS_UPDATE=0
-vpython3 --version
+export GCLIENT_PY3 = 1
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -84,6 +84,8 @@ install_dependencies_ubuntu() {
         $SUDO apt-get clean
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
+    vpython3 --version
+    vpython3 -m pip install httplib2
 }
 
 download_webrtc_sources() {
