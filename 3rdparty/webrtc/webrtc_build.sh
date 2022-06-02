@@ -98,6 +98,7 @@ download_webrtc_sources() {
     chmod 755 /depot_tools/vpython
     chmod 755 /depot_tools/vpython3
     chmod 755 /depot_tools/cipd
+    chmod 755 /depot_tools/download_from_google_storage
     #command -V fetch
     vpython3 --version
     vpython3 -m pip install \
