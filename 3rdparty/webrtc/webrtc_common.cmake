@@ -10,8 +10,8 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS "")
 
     # System Architecture ARM64 on Linux
-    set(WEBRTC_ARGS target_os=linux\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS target_cpu=arm64\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS target_os="linux"\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS target_cpu="arm64"\n${WEBRTC_ARGS})
 
     if(NOT MSVC)
         # ABI selection
