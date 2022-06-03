@@ -51,7 +51,6 @@ export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
 export GCLIENT_PY3=1
-export ARCH=aarch64
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -122,6 +121,10 @@ download_webrtc_sources() {
     echo random.org
     curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
     popd
+    cd /webrtc/src/third_party/libyuv
+    git checkout 966768
+    git pull origin master
+    cd /Open3D
 }
 
 build_webrtc() {
@@ -142,7 +145,6 @@ build_webrtc() {
     pushd ../webrtc/build
     cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release \
         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-        -DCMAKE_SYSTEM_PROCESSOR=${ARCH} \
         ..
     make -j$NPROC
     make install
