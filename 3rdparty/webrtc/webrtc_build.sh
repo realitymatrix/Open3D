@@ -34,12 +34,12 @@ set -euox pipefail
 #    Note that these patches may or may not be compatible with your custom
 #    WebRTC commits. You may have to patch them manually.
 
-# Date: Wed Apr 7 19:12:13 2021 +0200
-WEBRTC_COMMIT=${WEBRTC_COMMIT:-60e674842ebae283cc6b2627f4b6f2f8186f3317}
-# Date: Wed Apr 7 21:35:29 2021 +0000
-DEPOT_TOOLS_COMMIT=${DEPOT_TOOLS_COMMIT:-e1a98941d3ab10549be6d82d0686bb0fb91ec903}
+# WEBRTC_COMMIT
+WEBRTC_COMMIT=${WEBRTC_COMMIT}
+# DEPOT_TOOLS_COMMIT
+#DEPOT_TOOLS_COMMIT=${DEPOT_TOOLS_COMMIT}
 
-GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
+GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
 #export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
