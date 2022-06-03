@@ -51,6 +51,7 @@ export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
 export DEPOT_TOOLS_UPDATE=0
 export GCLIENT_PY3=1
+export ARCH=aarch64
 
 install_dependencies_ubuntu() {
     options="$(echo "$@" | tr ' ' '|')"
@@ -141,6 +142,7 @@ build_webrtc() {
     pushd ../webrtc/build
     cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release \
         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+        -DCMAKE_SYSTEM_PROCESSOR=${ARCH} \
         ..
     make -j$NPROC
     make install
