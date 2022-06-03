@@ -1,1 +1,1 @@
-sudo docker build --build-arg GLIBCXX_USE_CXX11_ABI=1 --build-arg WEBRTC_COMMIT=2f9d60b18d32bb91e0b8d04965d3d3b6264868ba -t open3d-webrtc:abi1 -f ./Open3D/3rdparty/webrtc/Dockerfile.webrtc .
+sudo docker build -t open3d-webrtc:abi1 -f ./Open3D/3rdparty/webrtc/Dockerfile.webrtc .

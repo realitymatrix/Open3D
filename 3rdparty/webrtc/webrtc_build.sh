@@ -35,14 +35,13 @@ set -euox pipefail
 #    WebRTC commits. You may have to patch them manually.
 
 # WEBRTC_COMMIT
-WEBRTC_COMMIT=${WEBRTC_COMMIT}
-# DEPOT_TOOLS_COMMIT
-#DEPOT_TOOLS_COMMIT=${DEPOT_TOOLS_COMMIT}
+WEBRTC_COMMIT=2f9d60b18d32bb91e0b8d04965d3d3b6264868ba
+# CXX ABI
+GLIBCXX_USE_CXX11_ABI=1
 
-GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI}
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
-#export PATH="$PWD/../depot_tools":${PATH}    # $(basename $PWD) == Open3D
+
 export DEPOT_TOOLS="/depot_tools"
 export PATH=${DEPOT_TOOLS}:${PATH}
 export PATH="/depot_tools/python-bin/python3":${PATH}
