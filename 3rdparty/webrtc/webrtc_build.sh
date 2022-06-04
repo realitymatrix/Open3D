@@ -35,9 +35,9 @@ set -euox pipefail
 #    WebRTC commits. You may have to patch them manually.
 
 # WEBRTC_COMMIT
-WEBRTC_COMMIT=2f9d60b18d32bb91e0b8d04965d3d3b6264868ba
+WEBRTC_COMMIT=${WEBRTC_COMMIT:-60e674842ebae283cc6b2627f4b6f2f8186f3317}
 # CXX ABI
-GLIBCXX_USE_CXX11_ABI=1
+GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
@@ -131,12 +131,12 @@ build_webrtc() {
     OPEN3D_DIR="$PWD"
     #echo Apply patches
     cp 3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} ../webrtc
-    #git -C ../webrtc/src apply \
-    #    "$OPEN3D_DIR"/3rdparty/webrtc/0001-src-enable-rtc_use_cxx11_abi-option.patch
-    #git -C ../webrtc/src/build apply \
-    #    "$OPEN3D_DIR"/3rdparty/webrtc/0001-build-enable-rtc_use_cxx11_abi-option.patch
-    #git -C ../webrtc/src/third_party apply \
-    #    "$OPEN3D_DIR"/3rdparty/webrtc/0001-third_party-enable-rtc_use_cxx11_abi-option.patch
+    git -C ../webrtc/src apply \
+        "$OPEN3D_DIR"/3rdparty/webrtc/0001-src-enable-rtc_use_cxx11_abi-option.patch
+    git -C ../webrtc/src/build apply \
+        "$OPEN3D_DIR"/3rdparty/webrtc/0001-build-enable-rtc_use_cxx11_abi-option.patch
+    git -C ../webrtc/src/third_party apply \
+        "$OPEN3D_DIR"/3rdparty/webrtc/0001-third_party-enable-rtc_use_cxx11_abi-option.patch
     WEBRTC_COMMIT_SHORT=$(git -C ../webrtc/src rev-parse --short=7 HEAD)
 
     echo Build WebRTC

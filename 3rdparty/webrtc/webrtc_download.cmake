@@ -4,7 +4,7 @@
 
 include(ExternalProject)
 
-set(WEBRTC_VER 2f9d60b)
+set(WEBRTC_VER 60e6748)
 if (APPLE)
     set(WEBRTC_URL
         https://github.com/isl-org/open3d_downloads/releases/download/webrtc/webrtc_${WEBRTC_VER}_macos_10.14.tar.gz
