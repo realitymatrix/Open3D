@@ -142,9 +142,9 @@ build_webrtc() {
     echo Build WebRTC
     mkdir ../webrtc/build
     pushd ../webrtc/build
-    cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. #\
-        #-DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-        #..
+    cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
+        -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+        ..
     make -j$NPROC
     make install
     popd # PWD=Open3D

@@ -14,24 +14,27 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS target_cpu="arm64"\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS arm_version="8"\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS libyuv_use_neon=false\n${WEBRTC_ARGS})
-    #set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS is_clang=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS is_debug=false\n${WEBRTC_ARGS})
+    
 
-    if(NOT MSVC)
+    #if(NOT MSVC)
         # ABI selection
-        if(GLIBCXX_USE_CXX11_ABI)
-            set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
-        else()
-            set(WEBRTC_ARGS rtc_use_cxx11_abi=false\n${WEBRTC_ARGS})
-        endif()
-    endif()
+    #    if(GLIBCXX_USE_CXX11_ABI)
+    #        set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
+    #    else()
+    #        set(WEBRTC_ARGS rtc_use_cxx11_abi=false\n${WEBRTC_ARGS})
+    #    endif()
+    #endif()
 
-    if (APPLE)  # WebRTC default
-        set(WEBRTC_ARGS is_clang=true\n${WEBRTC_ARGS})
-    else()
-        # Do not use Google clang for compilation due to LTO error when Open3D
-        # is built with gcc on Ubuntu 20.04.
-        set(WEBRTC_ARGS is_clang=false\n${WEBRTC_ARGS})
-    endif()
+    #if (APPLE)  # WebRTC default
+    #    set(WEBRTC_ARGS is_clang=true\n${WEBRTC_ARGS})
+    #else()
+    #    # Do not use Google clang for compilation due to LTO error when Open3D
+    #    # is built with gcc on Ubuntu 20.04.
+    #    set(WEBRTC_ARGS is_clang=false\n${WEBRTC_ARGS})
+    #endif()
 
     # Don't use libc++ (Clang), use libstdc++ (GNU)
     # https://stackoverflow.com/a/47384787/1255535
@@ -39,16 +42,16 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS use_custom_libcxx_for_host=false\n${WEBRTC_ARGS})
 
     # Debug/Release
-    if(WEBRTC_IS_DEBUG)
-        set(WEBRTC_ARGS is_debug=true\n${WEBRTC_ARGS})
-        if (MSVC)
-        # WebRTC default is false in Debug due to a performance penalty, but this would disable
-        # iterator debugging for Open3D and any user code as well with MSVC.
-            set(WEBRTC_ARGS enable_iterator_debugging=true\n${WEBRTC_ARGS})
-        endif()
-    else()
-        set(WEBRTC_ARGS is_debug=false\n${WEBRTC_ARGS})
-    endif()
+    #if(WEBRTC_IS_DEBUG)
+    #    set(WEBRTC_ARGS is_debug=true\n${WEBRTC_ARGS})
+    #    if (MSVC)
+    #    # WebRTC default is false in Debug due to a performance penalty, but this would disable
+    #    # iterator debugging for Open3D and any user code as well with MSVC.
+    #        set(WEBRTC_ARGS enable_iterator_debugging=true\n${WEBRTC_ARGS})
+    #    endif()
+    #else()
+    #    set(WEBRTC_ARGS is_debug=false\n${WEBRTC_ARGS})
+    #endif()
 
     # H264 support
     set(WEBRTC_ARGS is_chrome_branded=true\n${WEBRTC_ARGS})
