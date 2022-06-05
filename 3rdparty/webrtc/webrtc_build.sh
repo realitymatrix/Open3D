@@ -87,7 +87,7 @@ install_dependencies_ubuntu() {
 
     wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
     tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
-    export PATH ="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
+    export PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
 
     echo ${PATH}
 }
