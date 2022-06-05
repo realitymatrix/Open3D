@@ -114,8 +114,8 @@ download_webrtc_sources() {
     # Ref: https://chromium.googlesource.com/chromium/src/+/master/docs/building_old_revisions.md
     git -C src checkout $WEBRTC_COMMIT
     git -C src submodule update --init --recursive
-    echo gclient sync
-    gclient sync -D --force --reset
+    #echo gclient sync
+    #gclient sync -D --force --reset
     cd ..
     echo random.org
     curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
