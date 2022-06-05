@@ -35,7 +35,7 @@ set -euox pipefail
 #    WebRTC commits. You may have to patch them manually.
 
 # WEBRTC_COMMIT
-WEBRTC_COMMIT=${WEBRTC_COMMIT:-2f9d60b18d32bb91e0b8d04965d3d3b6264868ba}
+WEBRTC_COMMIT=${WEBRTC_COMMIT:-5f5bdf18806d20f7ea9f7a4b5331015c374d0bfc}
 # CXX ABI
 GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 
@@ -48,7 +48,7 @@ export PATH="/depot_tools/python-bin/python3":${PATH}
 export PATH="/depot_tools/python2-bin/python2":${PATH}
 export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
-export DEPOT_TOOLS_UPDATE=1
+export DEPOT_TOOLS_UPDATE=0
 export GCLIENT_PY3=1
 
 install_dependencies_ubuntu() {
@@ -71,7 +71,7 @@ install_dependencies_ubuntu() {
         software-properties-common \
         tree \
         curl \
-        ninja-build
+        wget
     curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - |
         $SUDO sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg' # Write to file, no stdout
@@ -84,6 +84,11 @@ install_dependencies_ubuntu() {
         $SUDO apt-get clean
         $SUDO rm -rf /var/lib/apt/lists/*
     fi
+
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+    tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+    export PATH ="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
+
     echo ${PATH}
 }
 
@@ -115,14 +120,16 @@ download_webrtc_sources() {
     git -C src checkout $WEBRTC_COMMIT
     git -C src submodule update --init --recursive
     echo gclient sync
-    gclient sync --nohooks --with_branch_heads # -D --force --reset
+    gclient sync -D --force --reset
     cd ..
     echo random.org
     curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
     popd
     cd /webrtc/src/third_party/libyuv
     git checkout 966768
-    git pull origin master
+    #git pull origin master
+    cd /webrtc/src
+    python3 ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
     cd /Open3D
 }
 
@@ -140,14 +147,20 @@ build_webrtc() {
     WEBRTC_COMMIT_SHORT=$(git -C ../webrtc/src rev-parse --short=7 HEAD)
 
     echo Build WebRTC
-    mkdir ../webrtc/build
-    pushd ../webrtc/build
-    cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
-        -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-        ..
-    make -j$NPROC
-    make install
-    popd # PWD=Open3D
+    cd /webrtc/src
+    gn gen ../../webrtc_release --args='is_debug=false enable_iterator_debugging=false treat_warnings_as_errors=false rtc_include_tests=false target_os="linux" target_cpu="arm64" is_clang=true libyuv_use_neon=false '
+    cd /webrtc_release
+    ninja -C . -j8
+    #mkdir ../webrtc/build
+    #pushd ../webrtc/build
+    #cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
+    #    -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+    #    -DCMAKE_CXX_COMPILER=clang++ \
+    #    -DCMAKE_BUILD_TYPE=Release \
+    #    ..
+    #make -j$NPROC
+    #make install
+    #popd # PWD=Open3D
     pushd ..
     tree -L 2 webrtc_release || ls webrtc_release/*
 

@@ -12,11 +12,13 @@ function(get_webrtc_args WEBRTC_ARGS)
     # System Architecture ARMV8 on Linux
     set(WEBRTC_ARGS target_os="linux"\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS target_cpu="arm64"\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS arm_version="8"\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS libyuv_use_neon=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS is_clang=false\n${WEBRTC_ARGS})
+    #set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS is_clang=true\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS is_debug=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS enable_iterator_debugging=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS treat_warnings_as_errors=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS rtc_include_tests=false\n${WEBRTC_ARGS})
     
 
     #if(NOT MSVC)
@@ -38,8 +40,8 @@ function(get_webrtc_args WEBRTC_ARGS)
 
     # Don't use libc++ (Clang), use libstdc++ (GNU)
     # https://stackoverflow.com/a/47384787/1255535
-    set(WEBRTC_ARGS use_custom_libcxx=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS use_custom_libcxx_for_host=false\n${WEBRTC_ARGS})
+    #set(WEBRTC_ARGS use_custom_libcxx=false\n${WEBRTC_ARGS})
+    #set(WEBRTC_ARGS use_custom_libcxx_for_host=false\n${WEBRTC_ARGS})
 
     # Debug/Release
     #if(WEBRTC_IS_DEBUG)
