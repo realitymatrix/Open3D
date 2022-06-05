@@ -115,7 +115,7 @@ download_webrtc_sources() {
     git -C src checkout $WEBRTC_COMMIT
     git -C src submodule update --init --recursive
     echo gclient sync
-    gclient sync -D --force --reset
+    gclient sync --nohooks --with_branch_heads # -D --force --reset
     cd ..
     echo random.org
     curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
