@@ -37,7 +37,7 @@ set -euox pipefail
 # WEBRTC_COMMIT
 WEBRTC_COMMIT=${WEBRTC_COMMIT:-2f9d60b18d32bb91e0b8d04965d3d3b6264868ba}
 # CXX ABI
-#GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
+GLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI:-1}
 
 NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)} # POSIX: MacOS + Linux
 SUDO=${SUDO:-sudo}                           # Set to command if running inside docker
@@ -48,7 +48,7 @@ export PATH="/depot_tools/python-bin/python3":${PATH}
 export PATH="/depot_tools/python2-bin/python2":${PATH}
 export PATH="/depot_tools/vpython":${PATH}
 export PATH="/depot_tools/vpython3":${PATH}
-export DEPOT_TOOLS_UPDATE=0
+export DEPOT_TOOLS_UPDATE=1
 export GCLIENT_PY3=1
 
 install_dependencies_ubuntu() {
@@ -114,8 +114,8 @@ download_webrtc_sources() {
     # Ref: https://chromium.googlesource.com/chromium/src/+/master/docs/building_old_revisions.md
     git -C src checkout $WEBRTC_COMMIT
     git -C src submodule update --init --recursive
-    #echo gclient sync
-    #gclient sync -D --force --reset
+    echo gclient sync
+    gclient sync -D --force --reset
     cd ..
     echo random.org
     curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
