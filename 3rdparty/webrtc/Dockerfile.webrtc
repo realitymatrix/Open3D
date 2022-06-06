@@ -64,8 +64,7 @@ RUN apt-get update && \
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - |
-
-RUN sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg' # Write to file, no stdout
+        sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
 
 RUN source <(grep VERSION_CODENAME /etc/os-release)
 
