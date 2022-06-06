@@ -19,8 +19,13 @@ ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
-RUN bash -c "chmod 777 /Open3D/3rdparty/webrtc/webrtc_build.sh"
+#RUN bash -c "chmod 777 /Open3D/3rdparty/webrtc/webrtc_build.sh"
 
-RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && install_dependencies_ubuntu purge-cache"
-RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && download_webrtc_sources"
-RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && build_webrtc"
+#RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && install_dependencies_ubuntu purge-cache"
+#RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && download_webrtc_sources"
+#RUN bash -c "source 3rdparty/webrtc/webrtc_build.sh && build_webrtc"
+
+
+ENV WEBRTC_COMMIT=60e674842ebae283cc6b2627f4b6f2f8186f3317
+ENV GLIBCXX_USE_CXX11_ABI=1
+ENV NPROC=$(getconf _NPROCESSORS_ONLN)

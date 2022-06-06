@@ -120,7 +120,7 @@ download_webrtc_sources() {
     git -C src checkout $WEBRTC_COMMIT
     git -C src submodule update --init --recursive
     echo gclient sync
-    gclient sync -D --force --reset
+    gclient sync -D --force --revision  ${WEBRTC_COMMIT} #-D --force --reset
     cd ..
     echo random.org
     curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
@@ -129,7 +129,7 @@ download_webrtc_sources() {
     git checkout 966768
     #git pull origin master
     cd /webrtc/src
-    python3 ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+    #python3 ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
     cd /Open3D
 }
 
