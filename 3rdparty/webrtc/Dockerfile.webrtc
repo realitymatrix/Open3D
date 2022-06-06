@@ -63,12 +63,9 @@ RUN apt-get update && \
         wget
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
-        2>/dev/null | gpg --dearmor - | \
-        sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
+        2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
 
-RUN source <(grep VERSION_CODENAME /etc/os-release)
-
-RUN apt-add-repository --yes "deb https://apt.kitware.com/ubuntu/ $VERSION_CODENAME main"
+RUN apt-add-repository --yes "deb https://apt.kitware.com/ubuntu/ bionic main"
 
 RUN apt-get update
 
@@ -76,15 +73,38 @@ RUN apt-get --yes install cmake
 
 RUN cmake --version >/dev/null
 
-RUN bash if [[ "purge-cache" =~ ^($options)$ ]]; then \
-            apt-get clean \
-            rm -rf /var/lib/apt/lists/* \
-         fi
+RUN apt-get clean && \
+ rm -rf /var/lib/apt/lists/*
+
+WORKDIR /
 
 RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
 
 RUN tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
     
-RUN export PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
+ENV PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
 
 RUN echo ${PATH}
+
+RUN clang++ --version
+
+RUN git clone https://github.com/realitymatrix/depot_tools.git
+RUN chmod 755 /depot_tools/gclient
+RUN chmod 755 /depot_tools/fetch
+RUN chmod 755 /depot_tools/vpython
+RUN chmod 755 /depot_tools/vpython3
+RUN chmod 755 /depot_tools/cipd
+RUN chmod 755 /depot_tools/download_from_google_storage
+RUN chmod 755 /depot_tools/gn
+RUN chmod 755 /depot_tools/ninja
+RUN vpython3 --version
+RUN vpython3 -m pip install \
+     httplib2 \
+     six
+
+RUN mkdir webrtc
+WORKDIR /webrtc
+RUN fetch --nohooks webrtc
+
+RUN git -C src checkout $WEBRTC_COMMIT
+RUN git -C src submodule update --init --recursive
