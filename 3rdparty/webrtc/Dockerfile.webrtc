@@ -62,11 +62,11 @@ RUN apt-get update && \
         curl \
         wget
 
-RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc && \
-        2>/dev/null | gpg --dearmor - | && \
+RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
+        2>/dev/null | gpg --dearmor - | \
         sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
 
-RUN source <(grep VERSION_CODENAME /etc/os-release)
+RUN bash source <(grep VERSION_CODENAME /etc/os-release)
 
 RUN apt-add-repository --yes "deb https://apt.kitware.com/ubuntu/ $VERSION_CODENAME main"
 
