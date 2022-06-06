@@ -61,3 +61,31 @@ RUN apt-get update && \
         tree \
         curl \
         wget
+
+RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
+        2>/dev/null | gpg --dearmor - |
+
+RUN sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg' # Write to file, no stdout
+
+RUN source <(grep VERSION_CODENAME /etc/os-release)
+
+RUN apt-add-repository --yes "deb https://apt.kitware.com/ubuntu/ $VERSION_CODENAME main"
+
+RUN apt-get update
+
+RUN apt-get --yes install cmake
+
+RUN cmake --version >/dev/null
+
+RUN bash if [[ "purge-cache" =~ ^($options)$ ]]; then \
+            apt-get clean \
+            rm -rf /var/lib/apt/lists/* \
+         fi
+
+RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+
+RUN tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+    
+RUN export PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
+
+RUN echo ${PATH}
