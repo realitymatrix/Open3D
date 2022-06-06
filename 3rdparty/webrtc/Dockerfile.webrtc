@@ -15,6 +15,9 @@
 
 FROM nvcr.io/nvidia/l4t-base:r32.6.1
 
+# For the rest of this Dockerfile
+SHELL ["/bin/bash", "-c"]
+
 ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
@@ -29,3 +32,32 @@ WORKDIR /Open3D/
 ENV WEBRTC_COMMIT=60e674842ebae283cc6b2627f4b6f2f8186f3317
 ENV GLIBCXX_USE_CXX11_ABI=1
 ENV NPROC=$(nproc)
+
+
+ENV DEPOT_TOOLS="/depot_tools"
+ENV PATH=${DEPOT_TOOLS}:${PATH}
+ENV PATH="/depot_tools/python-bin/python3":${PATH}
+ENV PATH="/depot_tools/python2-bin/python2":${PATH}
+ENV PATH="/depot_tools/vpython":${PATH}
+ENV PATH="/depot_tools/vpython3":${PATH}
+ENV DEPOT_TOOLS_UPDATE=0
+ENV GCLIENT_PY3=1
+
+RUN options="$(echo "$@" | tr ' ' '|')"
+
+RUN apt-get update && \
+    apt-get install -y \
+        apt-transport-https \
+        build-essential \
+        ca-certificates \
+        git \
+        gnupg \
+        libglib2.0-dev \
+        python \
+        python-pip \
+        python-setuptools \
+        python-wheel \
+        software-properties-common \
+        tree \
+        curl \
+        wget
