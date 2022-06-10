@@ -32,7 +32,6 @@ RUN apt-get update && \
         gnupg \
         libglib2.0-dev \
         python \
-        python* \
         python-pip \
         python-setuptools \
         python-wheel \
@@ -95,6 +94,7 @@ RUN chmod 755 /depot_tools/download_from_google_storage
 RUN vpython3 --version
 RUN vpython3 -m pip install \
      httplib2 \
+     pkg_resources \
      six
 
 RUN mkdir webrtc
