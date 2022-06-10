@@ -94,7 +94,7 @@ RUN chmod 755 /depot_tools/download_from_google_storage
 RUN vpython3 --version
 RUN vpython3 -m pip install \
      httplib2 \
-     pkg_resources \
+     setuptools \
      six
 
 RUN mkdir webrtc
