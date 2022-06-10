@@ -120,7 +120,7 @@ RUN cp -r /clang+llvm-12.0.1-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-bui
 
 # Replace GN
 RUN rm /webrtc/src/buildtools/linux64/gn
-RUN cp ./gn /webrtc/src/buildtools/linux64/gn
+RUN cp /gn /webrtc/src/buildtools/linux64/gn
 
 WORKDIR /Open3D
 
