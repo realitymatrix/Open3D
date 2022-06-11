@@ -101,7 +101,7 @@ RUN vpython -c "import pkg_resources; print(pkg_resources)"
 
 RUN mkdir webrtc
 WORKDIR /webrtc
-RUN fetch webrtc
+RUN fetch --nohooks webrtc
 
 RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
@@ -110,7 +110,8 @@ RUN git clean -f
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
-RUN gclient sync -D --force --reset
+RUN gclient sync
+#RUN gclient sync -D --force --reset
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
