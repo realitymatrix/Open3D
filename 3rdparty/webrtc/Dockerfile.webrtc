@@ -15,10 +15,10 @@ ENV NPROC=$(nproc)
 
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
-ENV PATH="/depot_tools/python-bin/python3":${PATH}
-ENV PATH="/depot_tools/python2-bin/python2":${PATH}
-ENV PATH="/depot_tools/vpython":${PATH}
-ENV PATH="/depot_tools/vpython3":${PATH}
+#ENV PATH="/depot_tools/python-bin/python3":${PATH}
+#ENV PATH="/depot_tools/python2-bin/python2":${PATH}
+#ENV PATH="/depot_tools/vpython":${PATH}
+#ENV PATH="/depot_tools/vpython3":${PATH}
 ENV DEPOT_TOOLS_UPDATE=0
 
 RUN options="$(echo "$@" | tr ' ' '|')"
@@ -94,8 +94,10 @@ RUN chmod 755 /depot_tools/download_from_google_storage
 RUN vpython3 --version
 RUN vpython3 -m pip install \
      httplib2 \
-     setuptools \
      six
+
+RUN vpython3 -c "import pkg_resources; print(pkg_resources)"
+RUN vpython -c "import pkg_resources; print(pkg_resources)"
 
 RUN mkdir webrtc
 WORKDIR /webrtc
