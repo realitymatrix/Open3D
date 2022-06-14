@@ -143,18 +143,18 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
-RUN make -j 8
+#RUN make -j 8
 
-RUN make install
+#RUN make install
 
-RUN tree -L 2 webrtc_release || ls webrtc_release/*
+#RUN tree -L 2 webrtc_release || ls webrtc_release/*
 
-RUN echo Package WebRTC
+#RUN echo Package WebRTC
 
-RUN tar -czf \
- "$OPEN3D_DIR/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
- webrtc_release
+#RUN tar -czf \
+# "$OPEN3D_DIR/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
+# webrtc_release
 
-RUN webrtc_package=$(ls webrtc_*.tar.gz)
-RUN cmake -E sha256sum "$webrtc_package" | tee "checksum_${webrtc_package%%.*}.txt"
-RUN ls -alh "$webrtc_package"
+#RUN webrtc_package=$(ls webrtc_*.tar.gz)
+#RUN cmake -E sha256sum "$webrtc_package" | tee "checksum_${webrtc_package%%.*}.txt"
+#RUN ls -alh "$webrtc_package"
