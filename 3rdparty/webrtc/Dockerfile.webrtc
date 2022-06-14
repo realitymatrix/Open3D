@@ -81,9 +81,6 @@ RUN vpython3 -m pip install \
      httplib2 \
      six
 
-RUN vpython3 -c "import pkg_resources; print(pkg_resources)"
-RUN vpython -c "import pkg_resources; print(pkg_resources)"
-
 RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch --nohooks webrtc
@@ -95,7 +92,8 @@ RUN git clean -f
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
-RUN gclient sync -D --force --reset
+RUN gclient sync -D 
+# --force --reset
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
