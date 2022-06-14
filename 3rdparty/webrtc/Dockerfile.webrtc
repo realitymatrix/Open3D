@@ -69,21 +69,6 @@ RUN clang++ --version
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
-# GN
-RUN rm /depot_tools/gn
-RUN wget https://github.com/realitymatrix/gn/releases/download/v2042/gn
-RUN cp ./gn /depot_tools/gn
-RUN chmod 755 /depot_tools/gn
-
-# Ninja
-RUN wget https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
-RUN rm /depot_tools/ninja
-RUN cp ./ninja /depot_tools/ninja
-RUN chmod 755 /depot_tools/ninja
-
-RUN gn --version
-RUN ninja --version
-
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
 RUN chmod 755 /depot_tools/vpython
@@ -120,6 +105,21 @@ RUN git checkout 966768
 # Replace LLVM
 RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
 RUN cp -r /clang+llvm-12.0.1-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
+
+# GN
+RUN rm /depot_tools/gn
+RUN wget https://github.com/realitymatrix/gn/releases/download/v2042/gn
+RUN cp ./gn /depot_tools/gn
+RUN chmod 755 /depot_tools/gn
+
+# Ninja
+RUN wget https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
+RUN rm /depot_tools/ninja
+RUN cp ./ninja /depot_tools/ninja
+RUN chmod 755 /depot_tools/ninja
+
+RUN gn --version
+RUN ninja --version
 
 # Replace GN
 RUN rm /webrtc/src/buildtools/linux64/gn
