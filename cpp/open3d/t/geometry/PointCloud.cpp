@@ -224,7 +224,7 @@ PointCloud &PointCloud::Rotate(const core::Tensor &R,
     return *this;
 }
 
-PointCloud PointCloud::SelectPoints(const core::Tensor &boolean_mask,
+PointCloud PointCloud::SelectByMask(const core::Tensor &boolean_mask,
                                     bool invert /* = false */) const {
     const int64_t length = GetPointPositions().GetLength();
     core::AssertTensorDtype(boolean_mask, core::Dtype::Bool);
@@ -241,13 +241,47 @@ PointCloud PointCloud::SelectPoints(const core::Tensor &boolean_mask,
     PointCloud pcd(GetDevice());
     for (auto &kv : GetPointAttr()) {
         if (HasPointAttr(kv.first)) {
-            pcd.SetPointAttr(kv.first,
-                             kv.second.IndexGet({indices_local}).Clone());
+            pcd.SetPointAttr(kv.first, kv.second.IndexGet({indices_local}));
         }
     }
 
     utility::LogDebug("Pointcloud down sampled from {} points to {} points.",
                       length, pcd.GetPointPositions().GetLength());
+    return pcd;
+}
+
+PointCloud PointCloud::SelectByIndex(
+        const core::Tensor &indices,
+        bool invert /* = false */,
+        bool remove_duplicates /* = false */) const {
+    const int64_t length = GetPointPositions().GetLength();
+    core::AssertTensorDtype(indices, core::Int64);
+    core::AssertTensorDevice(indices, GetDevice());
+
+    PointCloud pcd(GetDevice());
+
+    if (!remove_duplicates && !invert) {
+        core::TensorKey key = core::TensorKey::IndexTensor(indices);
+        for (auto &kv : GetPointAttr()) {
+            if (HasPointAttr(kv.first)) {
+                pcd.SetPointAttr(kv.first, kv.second.GetItem(key));
+            }
+        }
+        utility::LogDebug(
+                "Pointcloud down sampled from {} points to {} points.", length,
+                pcd.GetPointPositions().GetLength());
+    } else {
+        // The indices may have duplicate index value and will result in
+        // identity point cloud attributes. We convert indices Tensor into mask
+        // Tensor and call SelectByMask to avoid this situation.
+        core::Tensor mask =
+                core::Tensor::Zeros({length}, core::Bool, GetDevice());
+        mask.SetItem(core::TensorKey::IndexTensor(indices),
+                     core::Tensor::Init<bool>(true, GetDevice()));
+
+        pcd = SelectByMask(mask, invert);
+    }
+
     return pcd;
 }
 
@@ -305,7 +339,7 @@ std::tuple<PointCloud, core::Tensor> PointCloud::RemoveRadiusOutliers(
 
     const core::Tensor valid =
             num_neighbors.Ge(static_cast<int64_t>(nb_points));
-    const PointCloud pcd = SelectPoints(valid);
+    const PointCloud pcd = SelectByMask(valid);
 
     return std::make_tuple(pcd, valid);
 }
@@ -318,7 +352,7 @@ void PointCloud::EstimateNormals(
 
     const core::Dtype dtype = this->GetPointPositions().GetDtype();
     const core::Device device = GetDevice();
-    const core::Device::DeviceType device_type = device.GetType();
+
     const bool has_normals = HasPointNormals();
 
     if (!has_normals) {
@@ -339,11 +373,11 @@ void PointCloud::EstimateNormals(
         utility::LogDebug("Using Hybrid Search for computing covariances");
         // Computes and sets `covariances` attribute using Hybrid Search
         // method.
-        if (device_type == core::Device::DeviceType::CPU) {
+        if (IsCPU()) {
             kernel::pointcloud::EstimateCovariancesUsingHybridSearchCPU(
                     this->GetPointPositions().Contiguous(),
                     this->GetPointAttr("covariances"), radius.value(), max_knn);
-        } else if (device_type == core::Device::DeviceType::CUDA) {
+        } else if (IsCUDA()) {
             CUDA_CALL(kernel::pointcloud::
                               EstimateCovariancesUsingHybridSearchCUDA,
                       this->GetPointPositions().Contiguous(),
@@ -355,11 +389,11 @@ void PointCloud::EstimateNormals(
     } else {
         utility::LogDebug("Using KNN Search for computing covariances");
         // Computes and sets `covariances` attribute using KNN Search method.
-        if (device_type == core::Device::DeviceType::CPU) {
+        if (IsCPU()) {
             kernel::pointcloud::EstimateCovariancesUsingKNNSearchCPU(
                     this->GetPointPositions().Contiguous(),
                     this->GetPointAttr("covariances"), max_knn);
-        } else if (device_type == core::Device::DeviceType::CUDA) {
+        } else if (IsCUDA()) {
             CUDA_CALL(kernel::pointcloud::EstimateCovariancesUsingKNNSearchCUDA,
                       this->GetPointPositions().Contiguous(),
                       this->GetPointAttr("covariances"), max_knn);
@@ -369,11 +403,11 @@ void PointCloud::EstimateNormals(
     }
 
     // Estimate `normal` of each point using its `covariance` matrix.
-    if (device_type == core::Device::DeviceType::CPU) {
+    if (IsCPU()) {
         kernel::pointcloud::EstimateNormalsFromCovariancesCPU(
                 this->GetPointAttr("covariances"), this->GetPointNormals(),
                 has_normals);
-    } else if (device_type == core::Device::DeviceType::CUDA) {
+    } else if (IsCUDA()) {
         CUDA_CALL(kernel::pointcloud::EstimateNormalsFromCovariancesCUDA,
                   this->GetPointAttr("covariances"), this->GetPointNormals(),
                   has_normals);
@@ -399,7 +433,6 @@ void PointCloud::EstimateColorGradients(
 
     const core::Dtype dtype = this->GetPointColors().GetDtype();
     const core::Device device = GetDevice();
-    const core::Device::DeviceType device_type = device.GetType();
 
     if (!this->HasPointAttr("color_gradients")) {
         this->SetPointAttr(
@@ -419,14 +452,14 @@ void PointCloud::EstimateColorGradients(
     // Compute and set `color_gradients` attribute.
     if (radius.has_value()) {
         utility::LogDebug("Using Hybrid Search for computing color_gradients");
-        if (device_type == core::Device::DeviceType::CPU) {
+        if (IsCPU()) {
             kernel::pointcloud::EstimateColorGradientsUsingHybridSearchCPU(
                     this->GetPointPositions().Contiguous(),
                     this->GetPointNormals().Contiguous(),
                     this->GetPointColors().Contiguous(),
                     this->GetPointAttr("color_gradients"), radius.value(),
                     max_knn);
-        } else if (device_type == core::Device::DeviceType::CUDA) {
+        } else if (IsCUDA()) {
             CUDA_CALL(kernel::pointcloud::
                               EstimateColorGradientsUsingHybridSearchCUDA,
                       this->GetPointPositions().Contiguous(),
@@ -439,13 +472,13 @@ void PointCloud::EstimateColorGradients(
         }
     } else {
         utility::LogDebug("Using KNN Search for computing color_gradients");
-        if (device_type == core::Device::DeviceType::CPU) {
+        if (IsCPU()) {
             kernel::pointcloud::EstimateColorGradientsUsingKNNSearchCPU(
                     this->GetPointPositions().Contiguous(),
                     this->GetPointNormals().Contiguous(),
                     this->GetPointColors().Contiguous(),
                     this->GetPointAttr("color_gradients"), max_knn);
-        } else if (device_type == core::Device::DeviceType::CUDA) {
+        } else if (IsCUDA()) {
             CUDA_CALL(kernel::pointcloud::
                               EstimateColorGradientsUsingKNNSearchCUDA,
                       this->GetPointPositions().Contiguous(),
@@ -472,9 +505,7 @@ static PointCloud CreatePointCloudWithNormals(
     const float invalid_fill = NAN;
     // Filter defaults for depth processing
     const int bilateral_kernel_size =  // bilateral filter defaults for backends
-            depth_in.GetDevice().GetType() == core::Device::DeviceType::CUDA
-                    ? 3
-                    : 5;
+            depth_in.IsCUDA() ? 3 : 5;
     const float depth_diff_threshold = 0.14f;
     const float bilateral_value_sigma = 10.f;
     const float bilateral_distance_sigma = 10.f;
