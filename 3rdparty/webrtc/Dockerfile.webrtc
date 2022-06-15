@@ -56,7 +56,7 @@ RUN apt-get clean && \
 
 WORKDIR /
 
-RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
 
 RUN tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
     
@@ -85,14 +85,14 @@ RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch webrtc
 
-#RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
 WORKDIR /webrtc/src
-#RUN git clean -f
+RUN git clean -f
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
-RUN gclient sync -D --force --reset
+RUN gclient sync -D --force
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
