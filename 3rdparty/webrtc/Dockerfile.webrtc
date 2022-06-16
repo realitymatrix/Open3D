@@ -111,12 +111,12 @@ WORKDIR /
 
 # GN
 RUN rm /depot_tools/gn
-RUN wget https://github.com/realitymatrix/gn/releases/download/v2042/gn
+RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
 RUN cp ./gn /depot_tools/gn
 RUN chmod 755 /depot_tools/gn
 
 # Ninja
-RUN wget https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
+RUN wget -q https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
 RUN rm /depot_tools/ninja
 RUN cp ./ninja /depot_tools/ninja
 RUN chmod 755 /depot_tools/ninja
@@ -145,7 +145,7 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
-RUN make -j 8
+#RUN make -j 8
 
 #RUN make install
 
