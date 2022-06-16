@@ -34,6 +34,7 @@ RUN apt-get update && \
         python \
         python-pip \
         python-setuptools \
+        python3-setuptools \
         python-wheel \
         software-properties-common \
         tree \
@@ -57,13 +58,13 @@ RUN apt-get clean && \
 WORKDIR /
 
 #RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
-RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.0/clang+llvm-14.0.0-aarch64-linux-gnu.tar.xz
 
 #RUN tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
-RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+RUN tar -xf clang+llvm-14.0.0-aarch64-linux-gnu.tar.xz
     
 #ENV PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
-ENV PATH="/clang+llvm-14.0.5-aarch64-linux-gnu/bin":${PATH}
+ENV PATH="/clang+llvm-14.0.0-aarch64-linux-gnu/bin":${PATH}
 
 RUN echo ${PATH}
 
@@ -105,7 +106,7 @@ RUN git checkout 966768
 # Replace LLVM
 RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
 #RUN cp -r /clang+llvm-12.0.1-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
-RUN cp -r /clang+llvm-14.0.5-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
+RUN cp -r /clang+llvm-14.0.0-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
 
 WORKDIR /
 
