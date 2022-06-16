@@ -15,10 +15,7 @@ ENV NPROC=$(nproc)
 
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
-#ENV PATH="/depot_tools/python-bin/python3":${PATH}
-#ENV PATH="/depot_tools/python2-bin/python2":${PATH}
-#ENV PATH="/depot_tools/vpython":${PATH}
-#ENV PATH="/depot_tools/vpython3":${PATH}
+
 ENV DEPOT_TOOLS_UPDATE=0
 
 RUN options="$(echo "$@" | tr ' ' '|')"
@@ -57,18 +54,18 @@ RUN apt-get clean && \
 
 WORKDIR /
 
-#RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
-RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.0/clang+llvm-14.0.0-aarch64-linux-gnu.tar.xz
+RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+#RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.0/clang+llvm-14.0.0-aarch64-linux-gnu.tar.xz
 
-#RUN tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
-RUN tar -xf clang+llvm-14.0.0-aarch64-linux-gnu.tar.xz
+RUN tar -xf clang+llvm-12.0.1-aarch64-linux-gnu.tar.xz
+#RUN tar -xf clang+llvm-14.0.0-aarch64-linux-gnu.tar.xz
     
-#ENV PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
+ENV PATH="/clang+llvm-12.0.1-aarch64-linux-gnu/bin":${PATH}
 #ENV PATH="/clang+llvm-14.0.0-aarch64-linux-gnu/bin":${PATH}
 
-#RUN echo ${PATH}
+RUN echo ${PATH}
 
-#RUN clang++ --version
+RUN clang++ --version
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
@@ -104,8 +101,8 @@ WORKDIR /webrtc/src/third_party/libyuv
 RUN git checkout 966768
 
 # Replace LLVM
-#RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
-#RUN cp -r /clang+llvm-12.0.1-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
+RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
+RUN cp -r /clang+llvm-12.0.1-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
 #RUN cp -r /clang+llvm-14.0.0-aarch64-linux-gnu/ /webrtc/src/third_party/llvm-build/Release+Asserts/
 
 WORKDIR /
