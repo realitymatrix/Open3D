@@ -19,14 +19,14 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS clang_use_chrome_plugins=false\n${WEBRTC_ARGS})
     
 
-    if(NOT MSVC)
-        # ABI selection
-        if(GLIBCXX_USE_CXX11_ABI)
-            set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
-        else()
-            set(WEBRTC_ARGS rtc_use_cxx11_abi=false\n${WEBRTC_ARGS})
-        endif()
-    endif()
+#    if(NOT MSVC)
+#        # ABI selection
+#        if(GLIBCXX_USE_CXX11_ABI)
+#            set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
+#        else()
+#            set(WEBRTC_ARGS rtc_use_cxx11_abi=false\n${WEBRTC_ARGS})
+#        endif()
+#    endif()
 
     #if (APPLE)  # WebRTC default
     #    set(WEBRTC_ARGS is_clang=true\n${WEBRTC_ARGS})
