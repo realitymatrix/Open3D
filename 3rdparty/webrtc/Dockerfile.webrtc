@@ -67,7 +67,7 @@ RUN echo ${PATH}
 RUN clang++ --version
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
+RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
