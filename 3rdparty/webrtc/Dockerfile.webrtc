@@ -105,6 +105,10 @@ RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
 RUN cp ./gn /depot_tools/gn
 RUN chmod 755 /depot_tools/gn
 
+# Replace GN in buildtools
+RUN rm /webrtc/src/buildtools/linux64/gn
+RUN cp /gn /webrtc/src/buildtools/linux64/gn
+
 # Ninja
 RUN wget -q https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
 RUN rm /depot_tools/ninja
@@ -113,10 +117,6 @@ RUN chmod 755 /depot_tools/ninja
 
 RUN gn --version
 RUN ninja --version
-
-# Replace GN
-RUN rm /webrtc/src/buildtools/linux64/gn
-RUN cp /gn /webrtc/src/buildtools/linux64/gn
 
 WORKDIR /Open3D
 
