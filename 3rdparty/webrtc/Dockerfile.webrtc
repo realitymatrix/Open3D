@@ -85,7 +85,7 @@ RUN gclient sync -D --force --reset
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
 WORKDIR /webrtc/src/third_party/libyuv
-RUN git checkout 60e6748
+RUN git checkout 966768
 
 # Replace LLVM
 WORKDIR /webrtc/src/third_party/llvm-build/
@@ -118,11 +118,12 @@ RUN chmod 755 /depot_tools/ninja
 RUN gn --version
 RUN ninja --version
 
+
 WORKDIR /Open3D
 
 RUN cp 3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} ../webrtc
 
-ENV WEBRTC_COMMIT_SHORT=50674f7
+ENV WEBRTC_COMMIT_SHORT=60e6748
 
 WORKDIR /webrtc
 
@@ -132,6 +133,7 @@ WORKDIR /webrtc/build
 
 RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+        -DCMAKE_CXX_COMPILER=clang++ \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
