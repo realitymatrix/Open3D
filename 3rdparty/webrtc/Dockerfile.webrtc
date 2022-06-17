@@ -7,7 +7,7 @@ ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
-ENV WEBRTC_COMMIT=60e674842ebae283cc6b2627f4b6f2f8186f3317
+ENV WEBRTC_COMMIT=ab04559c7fe680a847fb754981e8305c82eb8fc5
 ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
 ENV GLIBCXX_USE_CXX11_ABI=1
 ENV NPROC=$(nproc)
@@ -71,7 +71,7 @@ RUN vpython3 -m pip install \
 
 RUN mkdir webrtc
 WORKDIR /webrtc
-RUN fetch webrtc
+RUN fetch --nohooks webrtc
 
 #RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
@@ -133,7 +133,7 @@ WORKDIR /webrtc/build
 
 RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-        -DCMAKE_CXX_COMPILER=clang++ \
+#        -DCMAKE_CXX_COMPILER=clang++ \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
