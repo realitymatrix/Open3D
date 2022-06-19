@@ -91,7 +91,7 @@ RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
-RUN rm -r ./.cipd/
+RUN rm -r /webrtc/.cipd/
 
 RUN gclient sync -D --force --reset
 
