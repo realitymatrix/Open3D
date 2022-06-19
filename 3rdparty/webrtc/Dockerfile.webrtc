@@ -10,7 +10,7 @@ WORKDIR /Open3D/
 # Set WebRTC version for Open3D consumable
 ENV WEBRTC_COMMIT_SHORT=29159ca
 ENV WEBRTC_COMMIT=29159ca979cb6670dd02cc09a45df1404f006793
-#ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
+ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 ENV NPROC=$(nproc)
@@ -84,8 +84,6 @@ RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch --nohooks webrtc
 
-#RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
-
 WORKDIR /webrtc/src
 RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
@@ -128,9 +126,6 @@ WORKDIR /webrtc/src/buildtools/linux64/
 RUN rm gn
 RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
 RUN chmod 755 gn
-
-#RUN gn --version
-#RUN ninja --version
 
 # Enable build with GNU toolchain via hack
 COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/toolchain/linux/BUILD.gn
