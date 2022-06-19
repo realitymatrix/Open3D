@@ -81,7 +81,8 @@ RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
-RUN gclient sync -D --force --reset
+RUN gclient sync
+# -D --force --reset
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
