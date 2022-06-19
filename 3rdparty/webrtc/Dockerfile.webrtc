@@ -23,11 +23,8 @@ ENV DEPOT_TOOLS_UPDATE=0
 
 RUN options="$(echo "$@" | tr ' ' '|')"
 
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
-
 RUN apt-get update && \
     apt-get install -y \
-        g++-10 \
         apt-transport-https \
         build-essential \
         ca-certificates \
@@ -43,6 +40,12 @@ RUN apt-get update && \
         tree \
         curl \
         wget
+
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+
+RUN apt-get update && \
+    apt-get install -y \
+    g++-10
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
