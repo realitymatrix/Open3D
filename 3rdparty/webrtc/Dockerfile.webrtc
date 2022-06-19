@@ -7,6 +7,8 @@ ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
+# Set WebRTC version for Open3D consumable
+ENV WEBRTC_COMMIT_SHORT=29159ca
 ENV WEBRTC_COMMIT=29159ca979cb6670dd02cc09a45df1404f006793
 #ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
 
@@ -17,12 +19,15 @@ ENV NPROC=$(nproc)
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
 
-ENV DEPOT_TOOLS_UPDATE=1
+ENV DEPOT_TOOLS_UPDATE=0
 
 RUN options="$(echo "$@" | tr ' ' '|')"
 
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+
 RUN apt-get update && \
     apt-get install -y \
+        g++-10 \
         apt-transport-https \
         build-essential \
         ca-certificates \
@@ -38,6 +43,8 @@ RUN apt-get update && \
         tree \
         curl \
         wget
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
@@ -56,7 +63,7 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
+RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
@@ -74,85 +81,89 @@ RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch --nohooks webrtc
 
-# RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+#RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
-# WORKDIR /webrtc/src
-# RUN git clean -ffd
-# RUN git checkout $WEBRTC_COMMIT
-# RUN git submodule update --init --recursive
+WORKDIR /webrtc/src
+RUN git clean -ffd
+RUN git checkout $WEBRTC_COMMIT
+RUN git submodule update --init --recursive
 
-# RUN gclient sync -D --force --reset
+RUN rm -r ./.cipd/
 
-# RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
+RUN gclient sync -D --force --reset
 
-# #WORKDIR /webrtc/src/third_party/libyuv
-# #RUN git checkout 966768
+RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
-# # Replace LLVM
-# #WORKDIR /webrtc/src/third_party/llvm-build/
-# #RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
-# #RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
-# #RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
-# #RUN mv ./clang+llvm-14.0.5-aarch64-linux-gnu ./Release+Asserts
-# #ENV PATH="/webrtc/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
-# #RUN echo ${PATH}
-# #RUN clang++ --version
+#WORKDIR /webrtc/src/third_party/libyuv
+#RUN git checkout 966768
 
-# WORKDIR /
+# Replace LLVM
+#WORKDIR /webrtc/src/third_party/llvm-build/
+#RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
+#RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+#RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+#RUN mv ./clang+llvm-14.0.5-aarch64-linux-gnu ./Release+Asserts
+#ENV PATH="/webrtc/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
+#RUN echo ${PATH}
+#RUN clang++ --version
 
-# # GN
-# RUN rm /depot_tools/gn
-# RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
-# #RUN cp ./gn /depot_tools/gn
-# #RUN chmod 755 /depot_tools/gn
+WORKDIR /
 
-# # Replace GN in buildtools
-# RUN rm /webrtc/src/buildtools/linux64/gn
-# RUN cp /gn /webrtc/src/buildtools/linux64/gn
-# RUN chmod 755 /webrtc/src/buildtools/linux64/gn
+# GN
+WORKDIR /depot_tools
+RUN rm gn
+RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
+RUN chmod 755 gn
 
-# # Ninja
-# RUN wget -q https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
-# RUN rm /depot_tools/ninja
-# RUN cp ./ninja /depot_tools/ninja
-# RUN chmod 755 /depot_tools/ninja
+# Ninja
+RUN rm ninja
+RUN wget -q https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
+RUN chmod 755 ninja
 
-# #RUN gn --version
-# #RUN ninja --version
+# Replace GN in buildtools
+WORKDIR /webrtc/src/buildtools/linux64/
+RUN rm gn
+RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
+RUN chmod 755 gn
 
-# # Enable build with GNU toolchain via hack
-# COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/build/toolchain/linux/BUILD.gn
+#RUN gn --version
+#RUN ninja --version
 
+# Enable build with GNU toolchain via hack
+COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/toolchain/linux/BUILD.gn
 
-# WORKDIR /Open3D
+# Copy webrtc buildfiles into webrtc dir
+RUN cp /Open3D/3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} /webrtc
 
-# RUN cp 3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} ../webrtc
+WORKDIR /webrtc
 
-# ENV WEBRTC_COMMIT_SHORT=29159ca
+RUN mkdir build
 
-# WORKDIR /webrtc
+WORKDIR /webrtc/build
 
-# RUN mkdir build
+# Generate ninja toolchain files
+RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
+        -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+	-DCMAKE_BUILD_TYPE=Release \
+        ..
 
-# WORKDIR /webrtc/build
+# Compile
+RUN make -j$(nproc)
 
-# RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
-#         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-# 	-DCMAKE_BUILD_TYPE=Release \
-#         ..
+# Install
+RUN make install
 
-# #RUN make -j 8
+WORKDIR /
 
-# #RUN make install
+# Package
+RUN tree -L 2 webrtc_release || ls webrtc_release/*
 
-# #RUN tree -L 2 webrtc_release || ls webrtc_release/*
+RUN echo Package WebRTC
 
-# #RUN echo Package WebRTC
+RUN tar -czf \
+ "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
+ webrtc_release
 
-# #RUN tar -czf \
-# # "$OPEN3D_DIR/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
-# # webrtc_release
-
-# #RUN webrtc_package=$(ls webrtc_*.tar.gz)
-# #RUN cmake -E sha256sum "$webrtc_package" | tee "checksum_${webrtc_package%%.*}.txt"
-# #RUN ls -alh "$webrtc_package"
+RUN webrtc_package=$(ls webrtc_*.tar.gz)
+RUN cmake -E sha256sum "$webrtc_package" | tee "checksum_${webrtc_package%%.*}.txt"
+RUN ls -alh "$webrtc_package"
