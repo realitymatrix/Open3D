@@ -17,7 +17,7 @@ ENV NPROC=$(nproc)
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
 
-#ENV DEPOT_TOOLS_UPDATE=1
+ENV DEPOT_TOOLS_UPDATE=1
 
 RUN options="$(echo "$@" | tr ' ' '|')"
 
@@ -81,8 +81,9 @@ RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
-RUN gclient sync
-# -D --force --reset
+ENV DEPOT_TOOLS_UPDATE=0
+
+RUN gclient sync -D --force --reset
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
