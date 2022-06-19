@@ -7,8 +7,9 @@ ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
-ENV WEBRTC_COMMIT=1e8bb67295b772f5ebd3c4a7c79cdbddfe563a7c
-ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
+ENV WEBRTC_COMMIT=29159ca979cb6670dd02cc09a45df1404f006793
+#ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
+
 ENV GLIBCXX_USE_CXX11_ABI=1
 ENV NPROC=$(nproc)
 
@@ -16,7 +17,7 @@ ENV NPROC=$(nproc)
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
 
-ENV DEPOT_TOOLS_UPDATE=0
+ENV DEPOT_TOOLS_UPDATE=1
 
 RUN options="$(echo "$@" | tr ' ' '|')"
 
@@ -55,7 +56,7 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
+#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
@@ -73,7 +74,7 @@ RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch --nohooks webrtc
 
-RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+#RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
 WORKDIR /webrtc/src
 RUN git clean -ffd
@@ -84,30 +85,31 @@ RUN gclient sync -D --force --reset
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
-WORKDIR /webrtc/src/third_party/libyuv
-RUN git checkout 966768
+#WORKDIR /webrtc/src/third_party/libyuv
+#RUN git checkout 966768
 
 # Replace LLVM
-WORKDIR /webrtc/src/third_party/llvm-build/
-RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
-RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
-RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
-RUN mv ./clang+llvm-14.0.5-aarch64-linux-gnu ./Release+Asserts
-ENV PATH="/webrtc/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
-RUN echo ${PATH}
-RUN clang++ --version
+#WORKDIR /webrtc/src/third_party/llvm-build/
+#RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
+#RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+#RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+#RUN mv ./clang+llvm-14.0.5-aarch64-linux-gnu ./Release+Asserts
+#ENV PATH="/webrtc/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
+#RUN echo ${PATH}
+#RUN clang++ --version
 
 WORKDIR /
 
 # GN
 RUN rm /depot_tools/gn
 RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
-RUN cp ./gn /depot_tools/gn
-RUN chmod 755 /depot_tools/gn
+#RUN cp ./gn /depot_tools/gn
+#RUN chmod 755 /depot_tools/gn
 
 # Replace GN in buildtools
 RUN rm /webrtc/src/buildtools/linux64/gn
 RUN cp /gn /webrtc/src/buildtools/linux64/gn
+RUN chmod 755 /webrtc/src/buildtools/linux64/gn
 
 # Ninja
 RUN wget -q https://github.com/realitymatrix/ninja/releases/download/v1.11.0/ninja
@@ -115,15 +117,18 @@ RUN rm /depot_tools/ninja
 RUN cp ./ninja /depot_tools/ninja
 RUN chmod 755 /depot_tools/ninja
 
-RUN gn --version
-RUN ninja --version
+#RUN gn --version
+#RUN ninja --version
+
+# Enable build with GNU toolchain via hack
+COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/build/toolchain/linux/BUILD.gn
 
 
 WORKDIR /Open3D
 
 RUN cp 3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} ../webrtc
 
-ENV WEBRTC_COMMIT_SHORT=1e8bb67
+ENV WEBRTC_COMMIT_SHORT=29159ca
 
 WORKDIR /webrtc
 
@@ -133,8 +138,6 @@ WORKDIR /webrtc/build
 
 RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-#        -DCMAKE_CXX_COMPILER=clang++ \
-        -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
