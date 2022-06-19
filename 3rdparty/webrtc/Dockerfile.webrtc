@@ -17,7 +17,7 @@ ENV NPROC=$(nproc)
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
 
-ENV DEPOT_TOOLS_UPDATE=1
+#ENV DEPOT_TOOLS_UPDATE=1
 
 RUN options="$(echo "$@" | tr ' ' '|')"
 
@@ -74,7 +74,7 @@ RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch --nohooks webrtc
 
-#RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
 WORKDIR /webrtc/src
 RUN git clean -ffd
