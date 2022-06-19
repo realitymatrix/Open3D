@@ -8,7 +8,7 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 ENV WEBRTC_COMMIT=29159ca979cb6670dd02cc09a45df1404f006793
-#ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
+ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 ENV NPROC=$(nproc)
@@ -56,7 +56,7 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
+RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
@@ -74,10 +74,10 @@ RUN mkdir webrtc
 WORKDIR /webrtc
 RUN fetch --nohooks webrtc
 
-RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+#RUN python /webrtc/src/build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
 
 WORKDIR /webrtc/src
-RUN git clean -ffd
+#RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
