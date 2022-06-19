@@ -17,7 +17,7 @@ ENV NPROC=$(nproc)
 ENV DEPOT_TOOLS="/depot_tools"
 ENV PATH=${DEPOT_TOOLS}:${PATH}
 
-ENV DEPOT_TOOLS_UPDATE=1
+ENV DEPOT_TOOLS_UPDATE=0
 
 RUN options="$(echo "$@" | tr ' ' '|')"
 
@@ -80,8 +80,6 @@ WORKDIR /webrtc/src
 RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
-
-ENV DEPOT_TOOLS_UPDATE=0
 
 RUN gclient sync -D --force --reset
 
