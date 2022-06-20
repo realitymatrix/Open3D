@@ -161,6 +161,6 @@ RUN tar -czf \
  "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
  webrtc_release
 
-ENV webrtc_package=$(ls webrtc_*.tar.gz)
+RUN export webrtc_package=$(ls webrtc_*.tar.gz)
 RUN cmake -E sha256sum "$webrtc_package" | tee "checksum_${webrtc_package%%.*}.txt"
 RUN ls -alh "$webrtc_package"
