@@ -1,9 +1,9 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-FROM ${BASE_IMAGE}
-
 ARG WEBRTC_IMAGE=open3d-webrtc:abi1
+
 FROM ${WEBRTC_IMAGE} as webrtc
+FROM ${BASE_IMAGE}
 
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
