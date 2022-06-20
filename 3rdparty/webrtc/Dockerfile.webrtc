@@ -81,7 +81,7 @@ RUN vpython3 -m pip install \
 
 RUN mkdir webrtc
 WORKDIR /webrtc
-RUN fetch --nohooks webrtc
+RUN fetch --nohooks --no-history webrtc
 
 WORKDIR /webrtc/src
 RUN git clean -ffd
@@ -90,7 +90,7 @@ RUN git submodule update --init --recursive
 
 RUN rm -r /webrtc/.cipd/
 
-RUN gclient sync -D --force --reset
+RUN gclient sync -D --force --reset --no-history
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
