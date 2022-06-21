@@ -17,7 +17,7 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS treat_warnings_as_errors=false\n${WEBRTC_ARGS})
     #set(WEBRTC_ARGS rtc_include_tests=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS clang_use_chrome_plugins=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS use_lld=true\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS use_lld=false\n${WEBRTC_ARGS})
     
 
 #    if(NOT MSVC)
