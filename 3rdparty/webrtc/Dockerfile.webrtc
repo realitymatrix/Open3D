@@ -8,9 +8,9 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
-ENV WEBRTC_COMMIT_SHORT=29159ca
-ENV WEBRTC_COMMIT=29159ca979cb6670dd02cc09a45df1404f006793
-#ENV DEPOT_TOOLS_COMMIT=93fbd989e046cdc2e4bf6a23b5a517e6c4c2d01b
+ENV WEBRTC_COMMIT_SHORT=60e6748
+ENV WEBRTC_COMMIT=60e674842ebae283cc6b2627f4b6f2f8186f3317
+ENV DEPOT_TOOLS_COMMIT=e1a98941d3ab10549be6d82d0686bb0fb91ec903
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -65,7 +65,7 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
+RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
@@ -93,19 +93,6 @@ RUN rm -r /webrtc/.cipd/
 RUN gclient sync -D --force --reset --no-history
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
-
-#WORKDIR /webrtc/src/third_party/libyuv
-#RUN git checkout 966768
-
-# Replace LLVM
-#WORKDIR /webrtc/src/third_party/llvm-build/
-#RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
-#RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
-#RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
-#RUN mv ./clang+llvm-14.0.5-aarch64-linux-gnu ./Release+Asserts
-#ENV PATH="/webrtc/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
-#RUN echo ${PATH}
-#RUN clang++ --version
 
 WORKDIR /
 
@@ -161,6 +148,6 @@ RUN tar -czf \
  "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
  webrtc_release
 
-ENV WEBRTC_PACKAGE="webrtc_29159ca_linux_cxx-abi-1.tar.gz"
+ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
 RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
 RUN ls -alh ${WEBRTC_PACKAGE}
