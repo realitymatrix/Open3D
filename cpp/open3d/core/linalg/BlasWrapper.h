@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include "/usr/include/aarch64-linux-gnu/cblas-netlib.h"
 #include "open3d/core/linalg/LinalgHeadersCPU.h"
 #include "open3d/core/linalg/LinalgHeadersCUDA.h"
 #include "open3d/utility/Logging.h"
