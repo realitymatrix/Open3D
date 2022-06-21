@@ -10,7 +10,7 @@ WORKDIR /Open3D/
 # Set WebRTC version for Open3D consumable
 ENV WEBRTC_COMMIT_SHORT=60e6748
 ENV WEBRTC_COMMIT=60e674842ebae283cc6b2627f4b6f2f8186f3317
-ENV DEPOT_TOOLS_COMMIT=e1a98941d3ab10549be6d82d0686bb0fb91ec903
+#ENV DEPOT_TOOLS_COMMIT=e1a98941d3ab10549be6d82d0686bb0fb91ec903
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -65,7 +65,7 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
+#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
