@@ -141,7 +141,7 @@ WORKDIR /root/Open3D
 
 # WebRTC package
 # Use pre-build WebRTC binaries
-COPY --from=webrtc /webrtc_29159ca_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
+COPY --from=webrtc /webrtc_bf2a70a_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
 
 # No virtual environment is needed, default to python 3.6
 RUN apt-get update && apt-get install -y \
