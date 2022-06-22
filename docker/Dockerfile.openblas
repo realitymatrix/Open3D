@@ -63,7 +63,7 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update && \
     apt-get install -y \
     g++-9
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 
 # Use CUDA 11 Toolkir provided by NVidia
 RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/cuda-ubuntu1804.pin
