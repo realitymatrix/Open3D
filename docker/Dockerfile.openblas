@@ -155,6 +155,7 @@ RUN cmake --version
 
 # Add ISPC support
 # ISPC Compiler
+RUN mkdir -p /usr/local/ispc/bin
 WORKDIR /usr/local/ispc/bin
 RUN wget -q https://github.com/realitymatrix/ispc/releases/download/no_version/ispc
 ENV PATH=/usr/local/ispc/bin:${PATH}
