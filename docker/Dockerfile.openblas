@@ -234,8 +234,8 @@ RUN mkdir build \
     -DUSE_SYSTEM_JPEG=ON \
     -DBUILD_CUDA_MODULE=ON \
     -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
-    #-DBUILD_ISPC_MODULE=ON \
-    #-DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
+    -DBUILD_ISPC_MODULE=ON \
+    -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
     -DGLIBCXX_USE_CXX11_ABI=ON \
     -DBUILD_FILAMENT_FROM_SOURCE=ON \
     #-DBUILD_TENSORFLOW_OPS=ON \
