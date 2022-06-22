@@ -54,6 +54,13 @@ RUN apt-get update && apt-get install -y \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
+# Extra dependency for ability to compile WebRTC
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+RUN apt-get update && \
+    apt-get install -y \
+    g++-10
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+
 # Install ccache after build-essential (gcc, g++).
 # Open3D CMake can detect and use ccache automatically, except for OpenBLAS.
 # Setting the /usr/lib/ccache path is necessary to cache OpenBLAS build.
@@ -75,7 +82,7 @@ RUN echo ${PATH} \
  && clang-7 --version
 
 # Uncomment this line to always fetch the latest ccache
-# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 # Download ccache from GCS bucket
 # If it doesn't exist on the cloud, an empty ${CCACHE_DIR} will be created.
