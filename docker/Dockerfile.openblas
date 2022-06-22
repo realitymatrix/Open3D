@@ -158,6 +158,7 @@ RUN cmake --version
 RUN mkdir -p /usr/local/ispc/bin
 WORKDIR /usr/local/ispc/bin
 RUN wget -q https://github.com/realitymatrix/ispc/releases/download/no_version/ispc
+RUN chmod 755 ispc
 ENV PATH=/usr/local/ispc/bin:${PATH}
 RUN ispc --support-matrix
 
