@@ -58,7 +58,7 @@ RUN apt-get update && apt-get install -y \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
-# Use GCC/G++ 10
+# Use GCC/G++ 9
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update && \
     apt-get install -y \
