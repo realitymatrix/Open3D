@@ -58,6 +58,7 @@ RUN apt-get update && apt-get install -y \
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update && \
     apt-get install -y \
+    software-properties-common \
     g++-10
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
