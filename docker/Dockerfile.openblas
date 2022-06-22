@@ -32,8 +32,8 @@ ENV HOME="/root"
 ENV CUDA_HOME="/usr/local/cuda"
 ENV PATH="/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
-#ENV LD_PRELOAD="/usr/lib/aarch64-linux-gnu/libgomp.so.1"
-#ENV LLVM_CONFIG="/usr/bin/llvm-config-9"
+ENV LD_PRELOAD="/usr/lib/aarch64-linux-gnu/libgomp.so.1"
+ENV LLVM_CONFIG="/usr/bin/llvm-config-9"
 ARG MAKEFLAGS=-j$(nproc) 
 
 # Minimal dependencies for running Docker
@@ -55,12 +55,25 @@ RUN apt-get update && apt-get install -y \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
-# Extra dependency for ability to compile WebRTC
+# Use GCC/G++ 10
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update && \
     apt-get install -y \
     g++-10
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+
+# Use CUDA 11 Toolkir provided by NVidia
+RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/cuda-ubuntu1804.pin
+RUN mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/3bf863cc.pub
+RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/ /"
+RUN apt-get update
+RUN apt-get -y install cuda
+
+# Test CUDA Toolkit Installation
+RUN nvcc --version
+RUN command -V nvcc
+RUN which nvcc
 
 # Install ccache after build-essential (gcc, g++).
 # Open3D CMake can detect and use ccache automatically, except for OpenBLAS.
@@ -130,7 +143,7 @@ RUN apt-get update -y && apt-get install -y \
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
 ENV CMAKE_VER_NUM=v3.22.1
-RUN wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.22.1/${CMAKE_VERSION}.tar.gz \
+RUN wget -q --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.22.1/${CMAKE_VERSION}.tar.gz \
         && tar -xf ${CMAKE_VERSION}.tar.gz \
         && cp -a -r ${CMAKE_VERSION} ${HOME}
 ENV PATH=${HOME}/${CMAKE_VERSION}/bin:${PATH}
@@ -187,7 +200,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     node --version
 
 # install npm
-RUN npm install -g \
+RUN npm install --location=global \
     yarn \
  && yarn --version
 
@@ -195,20 +208,30 @@ RUN npm install -g \
 RUN mkdir build \
  && cd build \
  && cmake \
-    -DBUILD_UNIT_TESTS=OFF \
+    -DUSE_BLAS=ON \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=~/open3d_install \
-    -DDEVELOPER_BUILD=${DEVELOPER_BUILD} \
-    -DBUILD_JUPYTER_EXTENSION=ON \
-    -DBUILD_PYTHON_MODULE=ON \
-    -DBUILD_WEBRTC=ON \
-    -DBUILD_WEBRTC_FROM_SOURCE=OFF \
+    -DBUILD_UNIT_TESTS=OFF \
+    -DBUILD_EXAMPLES=ON \
+    -DBUILD_SHARED_LIBS=ON \
     -DBUILD_GUI=ON \
-    -DGLIBCXX_USE_CXX11_ABI=ON \
-    -DBUILD_FILAMENT_FROM_SOURCE=ON \
+    -DBUILD_WEBRTC=ON \
+    -DCMAKE_C_COMPILER=gcc \
+    -DCMAKE_CXX_COMPILER=g++ \
     -DUSE_SYSTEM_JPEG=ON \
     -DBUILD_CUDA_MODULE=ON \
     -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+    #-DBUILD_ISPC_MODULE=ON \
+    #-DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
+    -DGLIBCXX_USE_CXX11_ABI=ON \
+    -DBUILD_FILAMENT_FROM_SOURCE=ON \
+    #-DBUILD_TENSORFLOW_OPS=ON \
+    #-DBUILD_PYTORCH_OPS=ON \
+    #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+    #-DBUNDLE_OPEN3D_ML=ON \
+    -DBUILD_JUPYTER_EXTENSION=ON \
+    -DBUILD_PYTHON_MODULE=ON \
+    #-DBUILD_LIBREALSENSE=ON \
+    -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
  && make -j$(nproc) \
  && make install-pip-package -j$(nproc) \
