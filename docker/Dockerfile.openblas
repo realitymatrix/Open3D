@@ -40,11 +40,13 @@ ARG MAKEFLAGS=-j$(nproc)
 # wget    : for downloading
 # libgl1  : available on Ubuntu ARM desktop by default
 # libgomp1: available on Ubuntu ARM desktop by default
+# libopenblas-dev: not available on L4T by default
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
     libgl1 \
     libgomp1 \
+    libopenblas-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # Minimal dependencies for building
@@ -126,7 +128,8 @@ RUN apt-get update -y && apt-get install -y \
     libreadline-dev \
     libsqlite3-dev \
     wget \
-    llvm \
+    llvm-9 \
+    llvm-9-dev \
     libncurses5-dev \
     libncursesw5-dev \
     xz-utils \
