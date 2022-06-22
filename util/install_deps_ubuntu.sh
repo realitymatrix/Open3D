@@ -26,6 +26,9 @@ dependencies=(
     libxi-dev
     # OpenBLAS build-from-source deps
     gfortran
+    libblas-dev
+    liblapack-dev
+    liblapacke-dev
     # ML deps
     libtbb-dev
     # Headless rendering deps
