@@ -41,12 +41,14 @@ RUN apt-get update && \
         wget
 
 
-# Use GCC/G++ 9
+# Use GCC/G++ 10
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+
 RUN apt-get update && \
     apt-get install -y \
-    g++-9
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+    g++-10
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
