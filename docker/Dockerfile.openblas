@@ -275,6 +275,7 @@ RUN mkdir build \
     #-DBUILD_LIBREALSENSE=ON \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
+ && make -j$(nproc) \
  && make install-pip-package -j$(nproc) \
  && make install -j$(nproc)
 # && pyenv rehash
