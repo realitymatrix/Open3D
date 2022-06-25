@@ -248,6 +248,33 @@ RUN mkdir build \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
  && make -j$(nproc) \
+ && cmake \
+    -DUSE_BLAS=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_UNIT_TESTS=OFF \
+    -DBUILD_EXAMPLES=ON \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_GUI=ON \
+    -DBUILD_WEBRTC=ON \
+    -DBUILD_WEBRTC_FROM_SOURCE=OFF \
+    -DCMAKE_C_COMPILER=gcc \
+    -DCMAKE_CXX_COMPILER=g++ \
+    -DUSE_SYSTEM_JPEG=ON \
+    -DBUILD_CUDA_MODULE=OFF \
+    #-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+    -DBUILD_ISPC_MODULE=ON \
+    -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
+    -DGLIBCXX_USE_CXX11_ABI=ON \
+    -DBUILD_FILAMENT_FROM_SOURCE=ON \
+    #-DBUILD_TENSORFLOW_OPS=ON \
+    #-DBUILD_PYTORCH_OPS=ON \
+    #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+    #-DBUNDLE_OPEN3D_ML=ON \
+    -DBUILD_JUPYTER_EXTENSION=ON \
+    -DBUILD_PYTHON_MODULE=ON \
+    #-DBUILD_LIBREALSENSE=ON \
+    -DCMAKE_INSTALL_PREFIX=~/open3d_install \
+    .. \
  && make install-pip-package -j$(nproc) \
  && make install -j$(nproc)
 # && pyenv rehash

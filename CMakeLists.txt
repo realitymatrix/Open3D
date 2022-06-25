@@ -129,7 +129,7 @@ option(BUILD_PYTORCH_OPS          "Build ops for PyTorch"                    OFF
 option(BUNDLE_OPEN3D_ML           "Includes the Open3D-ML repo in the wheel" OFF)
 
 # Release build options
-option(DEVELOPER_BUILD      "Add +commit_hash to the project version number" ON )
+option(DEVELOPER_BUILD      "Add +commit_hash to the project version number" OFF )
 if (NOT DEVELOPER_BUILD)
     if (NOT BUILD_COMMON_CUDA_ARCHS)
         set(BUILD_COMMON_CUDA_ARCHS ON CACHE BOOL "Build for common CUDA GPUs (for release)" FORCE)
