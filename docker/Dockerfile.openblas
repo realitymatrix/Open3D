@@ -217,7 +217,7 @@ RUN npm install --location=global \
     yarn \
  && yarn --version
 
-# install open3d
+# build open3d with CPU
 RUN mkdir build \
  && cd build \
  && cmake \
@@ -232,8 +232,8 @@ RUN mkdir build \
     -DCMAKE_C_COMPILER=gcc \
     -DCMAKE_CXX_COMPILER=g++ \
     -DUSE_SYSTEM_JPEG=ON \
-    -DBUILD_CUDA_MODULE=ON \
-    -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+    -DBUILD_CUDA_MODULE=OFF \
+    #-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
     -DBUILD_ISPC_MODULE=ON \
     -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
     -DGLIBCXX_USE_CXX11_ABI=ON \
@@ -247,8 +247,10 @@ RUN mkdir build \
     #-DBUILD_LIBREALSENSE=ON \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
- && make -j$(nproc) \
- && cmake \
+ && make -j$(nproc)
+ENV rebuild_list=(bin lib/Release/*.a lib/_build_config.py cpp lib/ml)
+RUN rm -r "${rebuild_list[@]}" || true
+RUN cmake \
     -DUSE_BLAS=ON \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_UNIT_TESTS=OFF \
@@ -260,8 +262,9 @@ RUN mkdir build \
     -DCMAKE_C_COMPILER=gcc \
     -DCMAKE_CXX_COMPILER=g++ \
     -DUSE_SYSTEM_JPEG=ON \
-    -DBUILD_CUDA_MODULE=OFF \
-    #-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+    -DBUILD_CUDA_MODULE=ON \
+    -DBUILD_COMMON_CUDA_ARCHS=ON \
+    -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
     -DBUILD_ISPC_MODULE=ON \
     -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
     -DGLIBCXX_USE_CXX11_ABI=ON \
