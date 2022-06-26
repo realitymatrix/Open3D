@@ -248,7 +248,6 @@ RUN mkdir build \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
  && make -j$(nproc)
-ENV rebuild_list=(bin lib/Release/*.a lib/_build_config.py cpp lib/ml)
 RUN rm -r bin
 RUN rm -r lib/Release/*.a
 RUN rm -r lib/_build_config.py
