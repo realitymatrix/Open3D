@@ -232,8 +232,8 @@ RUN mkdir build \
     -DCMAKE_C_COMPILER=gcc \
     -DCMAKE_CXX_COMPILER=g++ \
     -DUSE_SYSTEM_JPEG=ON \
-    -DBUILD_CUDA_MODULE=OFF \
-    #-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+    -DBUILD_CUDA_MODULE=ON \
+    -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
     -DBUILD_ISPC_MODULE=ON \
     -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
     -DGLIBCXX_USE_CXX11_ABI=ON \
@@ -260,8 +260,8 @@ RUN mkdir build \
     -DCMAKE_C_COMPILER=gcc \
     -DCMAKE_CXX_COMPILER=g++ \
     -DUSE_SYSTEM_JPEG=ON \
-    -DBUILD_CUDA_MODULE=ON \
-    -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+    -DBUILD_CUDA_MODULE=OFF \
+    #-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
     -DBUILD_ISPC_MODULE=ON \
     -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
     -DGLIBCXX_USE_CXX11_ABI=ON \
@@ -276,8 +276,9 @@ RUN mkdir build \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
  && make -j$(nproc) \
- && make install-pip-package -j$(nproc) \
- && make install -j$(nproc)
+ && make install-pip-package -j$(nproc)
+ # \
+ #&& make install -j$(nproc)
 # && pyenv rehash
 RUN cp build/lib/python_package/pip_package/*.whl /
 
