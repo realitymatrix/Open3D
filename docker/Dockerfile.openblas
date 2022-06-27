@@ -217,6 +217,8 @@ RUN npm install --location=global \
     yarn \
  && yarn --version
 
+ENV CMAKE_ARGS=
+
 # build open3d with CPU
 RUN mkdir build \
  && cd build \
@@ -248,11 +250,11 @@ RUN mkdir build \
     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
     .. \
  && make -j$(nproc)
-RUN rm -r /root/Open3D/bin
-RUN rm -r /root/Open3D/lib/Release/*.a
-RUN rm -r /root/Open3D/lib/_build_config.py
-RUN rm -r /root/Open3D/cpp
-RUN rm -r /root/Open3D/lib/ml
+RUN rm -r /root/Open3D/build/bin \
+ && rm -r /root/Open3D/build/lib/Release/*.a \
+ && rm -r /root/Open3D/build/lib/_build_config.py \
+ && rm -r /root/Open3D/build/cpp \
+ && rm -r /root/Open3D/build/lib/ml
 # build with GPU enabled
 RUN cmake \
     -DUSE_BLAS=ON \
