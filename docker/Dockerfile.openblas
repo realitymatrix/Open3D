@@ -252,7 +252,7 @@ RUN mkdir build \
  && make -j$(nproc)
 RUN rm -r /root/Open3D/build/bin \
  && rm -r /root/Open3D/build/lib/Release/*.a \
- && ls /root/Open3D/build/lib
+ && ls /root/Open3D/build/lib \
 # && rm -r /root/Open3D/build/lib/_build_config.py \
  && rm -r /root/Open3D/build/cpp \
  && rm -r /root/Open3D/build/lib/ml
