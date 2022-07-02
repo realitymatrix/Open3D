@@ -257,6 +257,7 @@ RUN rm -r /root/Open3D/build/bin \
  && rm -r /root/Open3D/build/cpp
 # && rm -r /root/Open3D/build/lib/ml
 # build with GPU enabled
+WORKDIR /root/Open3D/build
 RUN cmake \
     -DUSE_BLAS=ON \
     -DCMAKE_BUILD_TYPE=Release \
@@ -290,6 +291,7 @@ RUN cmake \
  # \
  #&& make install -j$(nproc)
 # && pyenv rehash
+WORKDIR /root/Open3D
 RUN cp build/lib/python_package/pip_package/*.whl /
 
 # Compress ccache folder, move to / directory (optional)
