@@ -217,79 +217,80 @@ RUN npm install --location=global \
     yarn \
  && yarn --version
 
-ENV CMAKE_ARGS=
+ENV CMAKE_ARGS={
+    "-DUSE_BLAS=ON"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DBUILD_UNIT_TESTS=OFF"
+    "-DBUILD_EXAMPLES=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_GUI=ON"
+    "-DBUILD_WEBRTC=ON"
+    "-DBUILD_WEBRTC_FROM_SOURCE=OFF"
+    "-DCMAKE_C_COMPILER=gcc"
+    "-DCMAKE_CXX_COMPILER=g++"
+    "-DUSE_SYSTEM_JPEG=ON"
+    "-DBUILD_CUDA_MODULE=ON"
+    "-DBUILD_COMMON_CUDA_ARCHS=ON"
+    "-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc"
+    "-DBUILD_ISPC_MODULE=ON"
+    "-DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc"
+    "-DGLIBCXX_USE_CXX11_ABI=ON"
+    "-DBUILD_FILAMENT_FROM_SOURCE=ON"
+    "-DBUILD_JUPYTER_EXTENSION=ON"
+    "-DBUILD_PYTHON_MODULE=ON"
+    "-DCMAKE_INSTALL_PREFIX=~/open3d_install"
+}
+
+#-DBUILD_TENSORFLOW_OPS=ON \
+#-DBUILD_PYTORCH_OPS=ON \
+#-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+#-DBUNDLE_OPEN3D_ML=ON \
+#-DBUILD_LIBREALSENSE=ON \
 
 # build open3d with CPU
 RUN mkdir build \
  && cd build \
- && cmake \
-    -DUSE_BLAS=ON \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DBUILD_UNIT_TESTS=OFF \
-    -DBUILD_EXAMPLES=ON \
-    -DBUILD_SHARED_LIBS=ON \
-    -DBUILD_GUI=ON \
-    -DBUILD_WEBRTC=ON \
-    -DBUILD_WEBRTC_FROM_SOURCE=OFF \
-    -DCMAKE_C_COMPILER=gcc \
-    -DCMAKE_CXX_COMPILER=g++ \
-    -DUSE_SYSTEM_JPEG=ON \
-    -DBUILD_CUDA_MODULE=OFF \
-    #-DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
-    -DBUILD_ISPC_MODULE=ON \
-    -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
-    -DGLIBCXX_USE_CXX11_ABI=ON \
-    -DBUILD_FILAMENT_FROM_SOURCE=ON \
-    #-DBUILD_TENSORFLOW_OPS=ON \
-    #-DBUILD_PYTORCH_OPS=ON \
-    #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
-    #-DBUNDLE_OPEN3D_ML=ON \
-    -DBUILD_JUPYTER_EXTENSION=ON \
-    -DBUILD_PYTHON_MODULE=ON \
-    #-DBUILD_LIBREALSENSE=ON \
-    -DCMAKE_INSTALL_PREFIX=~/open3d_install \
-    .. \
+ && cmake $CMAKE_ARGS \
  && make -j$(nproc)
-RUN rm -r /root/Open3D/build/bin \
- && rm -r /root/Open3D/build/lib/Release/*.a \
- && ls /root/Open3D/build/lib \
- && rm -r /root/Open3D/build/lib/_build_config.py.in \
- && rm -r /root/Open3D/build/cpp
+# RUN rm -r /root/Open3D/build/bin \
+#  && rm -r /root/Open3D/build/lib/Release/*.a \
+#  && ls /root/Open3D/build/lib \
+#  && rm -r /root/Open3D/build/lib/_build_config.py.in \
+#  && rm -r /root/Open3D/build/cpp
 # && rm -r /root/Open3D/build/lib/ml
 # build with GPU enabled
-WORKDIR /root/Open3D/build
-RUN cmake \
-    -DUSE_BLAS=ON \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DBUILD_UNIT_TESTS=OFF \
-    -DBUILD_EXAMPLES=ON \
-    -DBUILD_SHARED_LIBS=ON \
-    -DBUILD_GUI=ON \
-    -DBUILD_WEBRTC=ON \
-    -DBUILD_WEBRTC_FROM_SOURCE=OFF \
-    -DCMAKE_C_COMPILER=gcc \
-    -DCMAKE_CXX_COMPILER=g++ \
-    -DUSE_SYSTEM_JPEG=ON \
-    -DBUILD_CUDA_MODULE=ON \
-    -DBUILD_COMMON_CUDA_ARCHS=ON \
-    -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
-    -DBUILD_ISPC_MODULE=ON \
-    -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
-    -DGLIBCXX_USE_CXX11_ABI=ON \
-    -DBUILD_FILAMENT_FROM_SOURCE=ON \
-    #-DBUILD_TENSORFLOW_OPS=ON \
-    #-DBUILD_PYTORCH_OPS=ON \
-    #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
-    #-DBUNDLE_OPEN3D_ML=ON \
-    -DBUILD_JUPYTER_EXTENSION=ON \
-    -DBUILD_PYTHON_MODULE=ON \
-    #-DBUILD_LIBREALSENSE=ON \
-    -DCMAKE_INSTALL_PREFIX=~/open3d_install \
-    .. \
- && make -j$(nproc) \
- && make install-pip-package -j$(nproc)
- # \
- #&& make install -j$(nproc)
+# WORKDIR /root/Open3D/build
+# RUN cmake \
+#     -DUSE_BLAS=ON \
+#     -DCMAKE_BUILD_TYPE=Release \
+#     -DBUILD_UNIT_TESTS=OFF \
+#     -DBUILD_EXAMPLES=ON \
+#     -DBUILD_SHARED_LIBS=ON \
+#     -DBUILD_GUI=ON \
+#     -DBUILD_WEBRTC=ON \
+#     -DBUILD_WEBRTC_FROM_SOURCE=OFF \
+#     -DCMAKE_C_COMPILER=gcc \
+#     -DCMAKE_CXX_COMPILER=g++ \
+#     -DUSE_SYSTEM_JPEG=ON \
+#     -DBUILD_CUDA_MODULE=ON \
+#     -DBUILD_COMMON_CUDA_ARCHS=ON \
+#     -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
+#     -DBUILD_ISPC_MODULE=ON \
+#     -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
+#     -DGLIBCXX_USE_CXX11_ABI=ON \
+#     -DBUILD_FILAMENT_FROM_SOURCE=ON \
+#     #-DBUILD_TENSORFLOW_OPS=ON \
+#     #-DBUILD_PYTORCH_OPS=ON \
+#     #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+#     #-DBUNDLE_OPEN3D_ML=ON \
+#     -DBUILD_JUPYTER_EXTENSION=ON \
+#     -DBUILD_PYTHON_MODULE=ON \
+#     #-DBUILD_LIBREALSENSE=ON \
+#     -DCMAKE_INSTALL_PREFIX=~/open3d_install \
+#     .. \
+#  && make -j$(nproc) \
+ && make install-pip-package -j$(nproc) \
+ && make install -j$(nproc)
 # && pyenv rehash
 WORKDIR /root/Open3D
 RUN cp build/lib/python_package/pip_package/*.whl /
