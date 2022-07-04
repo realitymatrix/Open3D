@@ -316,7 +316,7 @@ RUN mkdir build \
 #     .. \
 #  && make -j$(nproc) \
  && make install-pip-package -j$(nproc) \
- && make install -j$(nproc)
+ && make install -j$(nproc) \
  && pyenv rehash
 WORKDIR /root/Open3D
 RUN cp build/lib/python_package/pip_package/*.whl /
