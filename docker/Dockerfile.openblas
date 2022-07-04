@@ -34,7 +34,7 @@ ENV PATH="/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 ENV LD_PRELOAD="/usr/lib/aarch64-linux-gnu/libgomp.so.1"
 ENV LLVM_CONFIG="/usr/bin/llvm-config-9"
-ARG MAKEFLAGS=-j$(nproc) 
+#ARG MAKEFLAGS
 
 # Minimal dependencies for running Docker
 # wget    : for downloading
@@ -65,7 +65,7 @@ RUN apt-get update && \
     g++-9
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 
-# Use CUDA 11 Toolkir provided by NVidia
+# Use CUDA 10 Toolkit provided by NVidia
 # RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/cuda-ubuntu1804.pin
 # RUN mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
 # RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/3bf863cc.pub
