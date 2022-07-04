@@ -217,7 +217,7 @@ RUN npm install --location=global \
     yarn \
  && yarn --version
 
-ENV CMAKE_ARGS={
+ENV CMAKE_ARGS=(
     "-DUSE_BLAS=ON"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_UNIT_TESTS=OFF"
@@ -239,7 +239,7 @@ ENV CMAKE_ARGS={
     "-DBUILD_JUPYTER_EXTENSION=ON"
     "-DBUILD_PYTHON_MODULE=ON"
     "-DCMAKE_INSTALL_PREFIX=~/open3d_install"
-}
+)
 
 #-DBUILD_TENSORFLOW_OPS=ON \
 #-DBUILD_PYTORCH_OPS=ON \
