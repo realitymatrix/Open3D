@@ -73,16 +73,8 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr
 # RUN apt-get update
 # RUN apt-get -y install cuda
 
-#
-# configure nvidia apt repo
-#
-COPY packages/nvidia-l4t-apt-source.list /tmp/apt/nvidia-l4t-apt-source.list
-COPY packages/nvidia-l4t-apt-source.clean.list /tmp/apt/nvidia-l4t-apt-source.clean.list
-
-RUN apt-key adv --fetch-key https://repo.download.nvidia.com/jetson/jetson-ota-public.asc && \
-    cp /etc/apt/sources.list /tmp/apt && \
-    cat /tmp/apt/nvidia-l4t-apt-source.list >> /etc/apt/sources.list && \
-    cat /etc/apt/sources.list
+# Configure nvidia apt repo
+RUN apt-key adv --fetch-key https://repo.download.nvidia.com/jetson/jetson-ota-public.asc
 
 # Install CUDA Toolkit
 RUN apt-get update && \
