@@ -297,7 +297,7 @@ RUN rm -r /root/Open3D/build/bin \
 # && rm -r /root/Open3D/build/lib/ml
 # build with GPU enabled
 WORKDIR /root/Open3D/build
-RUN && cmake \
+RUN cmake \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DBUILD_UNIT_TESTS=${BUILD_UNIT_TESTS} \
