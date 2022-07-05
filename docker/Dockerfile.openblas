@@ -73,15 +73,15 @@ RUN apt-get update && apt-get install -y \
 # RUN apt-get update
 # RUN apt-get -y install cuda
 
-# Configure nvidia apt repo
-RUN apt-key adv --fetch-key https://repo.download.nvidia.com/jetson/jetson-ota-public.asc
+# # Configure nvidia apt repo
+# RUN apt-key adv --fetch-key https://repo.download.nvidia.com/jetson/jetson-ota-public.asc
 
-# Install CUDA Toolkit
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-		  cuda-toolkit-* \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+# # Install CUDA Toolkit
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends \
+# 		  cuda-toolkit-* \
+#     && rm -rf /var/lib/apt/lists/* \
+#     && apt-get clean
 
 # Test CUDA Toolkit Installation
 RUN nvcc --version
@@ -266,13 +266,13 @@ RUN mkdir build \
     -DBUILD_EXAMPLES=${BUILD_EXAMPLES} \
     -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
     -DBUILD_GUI=${BUILD_GUI} \
-    -DBUILD_WEBRTC=${BUILD_WEBRTC} \
-    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
+#    -DBUILD_WEBRTC=${BUILD_WEBRTC} \
+#    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
     -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} \
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
     -DUSE_SYSTEM_JPEG=${USE_SYSTEM_JPEG} \
     -DBUILD_CUDA_MODULE=${BUILD_CUDA_MODULE} \
-    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_COMMON_CUDA_ARCHS} \
+#    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_COMMON_CUDA_ARCHS} \
     -DCMAKE_CUDA_COMPILER:PATH=/usr/local/cuda/bin/nvcc \
     -DBUILD_ISPC_MODULE=${BUILD_ISPC_MODULE} \
     -DCMAKE_ISPC_COMPILER:PATH=/usr/local/ispc/bin/ispc \
@@ -282,7 +282,7 @@ RUN mkdir build \
     #-DBUILD_PYTORCH_OPS=ON \
     #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
     #-DBUNDLE_OPEN3D_ML=ON \
-    -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
+#    -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
     #-DBUILD_LIBREALSENSE=ON \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
