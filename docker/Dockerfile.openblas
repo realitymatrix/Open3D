@@ -267,7 +267,7 @@ RUN mkdir build \
     -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
     -DBUILD_GUI=${BUILD_GUI} \
     -DBUILD_WEBRTC=${BUILD_WEBRTC} \
-    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
+#    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
     -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} \
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
     -DUSE_SYSTEM_JPEG=${USE_SYSTEM_JPEG} \
@@ -287,7 +287,8 @@ RUN mkdir build \
     #-DBUILD_LIBREALSENSE=ON \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
     .. \
- && make -j$(nproc) \
+ && make -j$(nproc)
+
 RUN rm -r /root/Open3D/build/bin \
  && rm -r /root/Open3D/build/lib/Release/*.a \
  && ls /root/Open3D/build/lib \
