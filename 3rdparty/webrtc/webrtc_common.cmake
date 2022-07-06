@@ -15,19 +15,23 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS libyuv_use_neon=true\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS is_clang=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS treat_warnings_as_errors=false\n${WEBRTC_ARGS})
-    #set(WEBRTC_ARGS rtc_include_tests=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS dcheck_always_on=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS clang_use_chrome_plugins=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS use_lld=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS is_component_build=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS symbol_level=1\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS use_cxx11=true\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS use_goma=false\n${WEBRTC_ARGS})
     
 
-#    if(NOT MSVC)
-#        # ABI selection
-#        if(GLIBCXX_USE_CXX11_ABI)
-#            set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
-#        else()
-#            set(WEBRTC_ARGS rtc_use_cxx11_abi=false\n${WEBRTC_ARGS})
-#        endif()
-#    endif()
+   if(NOT MSVC)
+       # ABI selection
+       if(GLIBCXX_USE_CXX11_ABI)
+           set(WEBRTC_ARGS rtc_use_cxx11_abi=true\n${WEBRTC_ARGS})
+       else()
+           set(WEBRTC_ARGS rtc_use_cxx11_abi=false\n${WEBRTC_ARGS})
+       endif()
+   endif()
 
     #if (APPLE)  # WebRTC default
     #    set(WEBRTC_ARGS is_clang=true\n${WEBRTC_ARGS})
