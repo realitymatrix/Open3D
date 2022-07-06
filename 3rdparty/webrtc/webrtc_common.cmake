@@ -19,9 +19,9 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS clang_use_chrome_plugins=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS use_lld=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS is_component_build=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS symbol_level=1\n${WEBRTC_ARGS})
+#   set(WEBRTC_ARGS symbol_level=1\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS use_cxx11=true\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS use_goma=false\n${WEBRTC_ARGS})
+#   set(WEBRTC_ARGS use_goma=false\n${WEBRTC_ARGS})
     
 
    if(NOT MSVC)
