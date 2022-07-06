@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/l4t-base:r32.6.1
+FROM nvcr.io/nvidia/l4t-base:r32.7.1
 
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
@@ -41,14 +41,14 @@ RUN apt-get update && \
         wget
 
 
-# Use GCC/G++ 10
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+# # Use GCC/G++ 10
+# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
-RUN apt-get update && \
-    apt-get install -y \
-    g++-10
+# RUN apt-get update && \
+#     apt-get install -y \
+#     g++-10
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+# RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
