@@ -181,13 +181,13 @@ RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
 # Open3D repo
 # Always keep /root/Open3D as the WORKDIR
 COPY . /root/Open3D
-WORKDIR /root/Open3D
 
 # WebRTC package
 # Use pre-build WebRTC binaries
 WORKDIR /root/Open3D/3rdparty_downloads/webrtc/
 RUN wget -q https://github.com/realitymatrix/webrtc/releases/download/bf2a70a_linux/webrtc_bf2a70a_linux_cxx-abi-1.tar.gz
 #COPY --from=webrtc /webrtc_bf2a70a_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
+WORKDIR /root/Open3D
 
 # Python virtual environment is needed, version passed as ARG
 RUN apt-get update && apt-get install -y \
