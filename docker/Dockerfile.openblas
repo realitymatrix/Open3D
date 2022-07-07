@@ -1,6 +1,6 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-ARG ML_IMAGE=ml:latest
+ARG ML_IMAGE=l4t-ml:latest
 #ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 FROM ${ML_IMAGE} as ml
