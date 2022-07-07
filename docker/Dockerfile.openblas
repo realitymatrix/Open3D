@@ -1,12 +1,17 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
+ARG ML_IMAGE=ml:latest
 #ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
+FROM ${ML_IMAGE} as ml
 #FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
 
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
+
+# Import ml dependencies
+COPY --from=ml /usr/local/lib/python3.6/dist-packages/ /usr/local/lib/python3.6/dist-packages/
 
 # Needed for wget
 RUN apt-get update && apt-get install -y \
@@ -150,7 +155,8 @@ RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
 
 # Open3D repo
 # Always keep /root/Open3D as the WORKDIR
-COPY . /root/Open3D
+COPY ./Open3D /root/Open3D
+COPY ./Open3D-ML /root/Open3D
 
 # WebRTC package
 # Use pre-build WebRTC binaries
@@ -223,7 +229,7 @@ ENV BUILD_PYTHON_MODULE=ON
 ENV CMAKE_INSTALL_PREFIX="~/open3d_install"
 ENV DBUILD_TENSORFLOW_OPS=ON
 ENV BUILD_PYTORCH_OPS=ON
-ENV OPEN3D_ML_ROOT=${OPEN3D_ML_ROOT}
+ENV OPEN3D_ML_ROOT="/root/Open3D-ML"
 ENV BUNDLE_OPEN3D_ML=ON
 ENV BUILD_LIBREALSENSE=ON
 
@@ -249,7 +255,7 @@ RUN mkdir build \
     -DBUILD_CUDA_MODULE=OFF \
     -DBUILD_TENSORFLOW_OPS=ON \
     -DBUILD_PYTORCH_OPS=ON \
-    -DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+    -DOPEN3D_ML_ROOT:PATH=${OPEN3D_ML_ROOT} \
     -DBUNDLE_OPEN3D_ML=ON \
     -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
