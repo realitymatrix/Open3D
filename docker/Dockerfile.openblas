@@ -2,7 +2,7 @@
 ARG BASE_IMAGE
 ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
-FROM ${WEBRTC_IMAGE} as webrtc
+#FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
 
 # For the rest of this Dockerfile
@@ -185,7 +185,9 @@ WORKDIR /root/Open3D
 
 # WebRTC package
 # Use pre-build WebRTC binaries
-COPY --from=webrtc /webrtc_bf2a70a_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
+WORKDIR /root/Open3D/3rdparty_downloads/webrtc/
+RUN wget -q https://github.com/realitymatrix/webrtc/releases/download/bf2a70a_linux/webrtc_bf2a70a_linux_cxx-abi-1.tar.gz
+#COPY --from=webrtc /webrtc_bf2a70a_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
 
 # Python virtual environment is needed, version passed as ARG
 RUN apt-get update && apt-get install -y \
