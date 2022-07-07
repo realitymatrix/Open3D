@@ -1,6 +1,6 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-ARG WEBRTC_IMAGE=open3d-webrtc:abi1
+#ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 #FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
@@ -57,36 +57,6 @@ RUN apt-get update && apt-get install -y \
     clang-7 \
     git  \
  && rm -rf /var/lib/apt/lists/*
-
-# Use GCC/G++ 9
-# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
-# RUN apt-get update && \
-#     apt-get install -y \
-#     g++-9
-# RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr/bin/g++ g++ /usr/bin/g++-9
-
-# Use CUDA 10 Toolkit provided by NVidia
-# RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/cuda-ubuntu1804.pin
-# RUN mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
-# RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/3bf863cc.pub
-# RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/sbsa/ /"
-# RUN apt-get update
-# RUN apt-get -y install cuda
-
-# # Configure nvidia apt repo
-# RUN apt-key adv --fetch-key https://repo.download.nvidia.com/jetson/jetson-ota-public.asc
-
-# # Install CUDA Toolkit
-# RUN apt-get update && \
-#     apt-get install -y --no-install-recommends \
-# 		  cuda-toolkit-* \
-#     && rm -rf /var/lib/apt/lists/* \
-#     && apt-get clean
-
-# Test CUDA Toolkit Installation
-RUN nvcc --version
-RUN command -V nvcc
-RUN which nvcc
 
 # Install ccache after build-essential (gcc, g++).
 # Open3D CMake can detect and use ccache automatically, except for OpenBLAS.
@@ -251,12 +221,11 @@ ENV BUILD_FILAMENT_FROM_SOURCE=ON
 ENV BUILD_JUPYTER_EXTENSION=ON
 ENV BUILD_PYTHON_MODULE=ON
 ENV CMAKE_INSTALL_PREFIX="~/open3d_install"
-
-#-DBUILD_TENSORFLOW_OPS=ON \
-#-DBUILD_PYTORCH_OPS=ON \
-#-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
-#-DBUNDLE_OPEN3D_ML=ON \
-#-DBUILD_LIBREALSENSE=ON \
+ENV DBUILD_TENSORFLOW_OPS=ON
+ENV BUILD_PYTORCH_OPS=ON
+ENV OPEN3D_ML_ROOT=${OPEN3D_ML_ROOT}
+ENV BUNDLE_OPEN3D_ML=ON
+ENV BUILD_LIBREALSENSE=ON
 
 # build open3d with GPU
 RUN mkdir build \
@@ -269,21 +238,19 @@ RUN mkdir build \
     -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
     -DBUILD_GUI=${BUILD_GUI} \
     -DBUILD_WEBRTC=${BUILD_WEBRTC} \
-#    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
+    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
     -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} \
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
     -DUSE_SYSTEM_JPEG=${USE_SYSTEM_JPEG} \
-    -DBUILD_CUDA_MODULE=OFF \
-#    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_COMMON_CUDA_ARCHS} \
-#    -DCMAKE_CUDA_COMPILER:PATH=${CMAKE_CUDA_COMPILER} \
     -DBUILD_ISPC_MODULE=${BUILD_ISPC_MODULE} \
     -DCMAKE_ISPC_COMPILER:PATH=${CMAKE_ISPC_COMPILER} \
     -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
     -DBUILD_FILAMENT_FROM_SOURCE=${BUILD_FILAMENT_FROM_SOURCE} \
-    #-DBUILD_TENSORFLOW_OPS=ON \
-    #-DBUILD_PYTORCH_OPS=ON \
-    #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
-    #-DBUNDLE_OPEN3D_ML=ON \
+    -DBUILD_CUDA_MODULE=OFF \
+    -DBUILD_TENSORFLOW_OPS=ON \
+    -DBUILD_PYTORCH_OPS=ON \
+    -DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+    -DBUNDLE_OPEN3D_ML=ON \
     -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
     #-DBUILD_LIBREALSENSE=ON \
@@ -312,16 +279,16 @@ RUN cmake \
     -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
     -DUSE_SYSTEM_JPEG=${USE_SYSTEM_JPEG} \
     -DBUILD_CUDA_MODULE=${BUILD_CUDA_MODULE} \
-#    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_COMMON_CUDA_ARCHS} \
+    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_COMMON_CUDA_ARCHS} \
     -DCMAKE_CUDA_COMPILER:PATH=${CMAKE_CUDA_COMPILER} \
     -DBUILD_ISPC_MODULE=${BUILD_ISPC_MODULE} \
     -DCMAKE_ISPC_COMPILER:PATH=${CMAKE_ISPC_COMPILER} \
     -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
     -DBUILD_FILAMENT_FROM_SOURCE=${BUILD_FILAMENT_FROM_SOURCE} \
-    #-DBUILD_TENSORFLOW_OPS=ON \
-    #-DBUILD_PYTORCH_OPS=ON \
-    #-DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
-    #-DBUNDLE_OPEN3D_ML=ON \
+    -DBUILD_TENSORFLOW_OPS=ON \
+    -DBUILD_PYTORCH_OPS=ON \
+    -DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+    -DBUNDLE_OPEN3D_ML=ON \
     -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
     #-DBUILD_LIBREALSENSE=ON \
