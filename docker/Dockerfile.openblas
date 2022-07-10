@@ -155,15 +155,16 @@ RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
 
 # Open3D repo
 # Always keep /root/Open3D as the WORKDIR
-COPY /home/super/Documents/repo/o3d/Open3D /root/Open3D
-COPY /home/super/Documents/repo/o3d/Open3D-ML /root/Open3D
+ENV OPEN3D_ROOT=/root/Open3D
+RUN git clone https://github.com/realitymatrix/Open3D.git
+RUN git clone https://github.com/realitymatrix/Open3D-ML.git
 
 # WebRTC package
 # Use pre-build WebRTC binaries
 WORKDIR /root/Open3D/3rdparty_downloads/webrtc/
 RUN wget -q https://github.com/realitymatrix/webrtc/releases/download/bf2a70a_linux_gcc/webrtc_bf2a70a_linux_cxx-abi-1.tar.gz
 #COPY --from=webrtc /webrtc_bf2a70a_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
-WORKDIR /root/Open3D
+WORKDIR ${OPEN3D_ROOT}
 
 # Python virtual environment is needed, version passed as ARG
 RUN apt-get update && apt-get install -y \
@@ -264,13 +265,13 @@ RUN mkdir build \
     .. \
  && make -j$(nproc)
 
-RUN rm -r /root/Open3D/build/bin \
- && rm -r /root/Open3D/build/lib/Release/*.a \
- && rm -r /root/Open3D/build/lib/_build_config.py.in \
- && rm -r /root/Open3D/build/cpp \
- && rm -r /root/Open3D/build/lib/ml
+RUN rm -r ${OPEN3D_ROOT}/build/bin \
+ && rm -r ${OPEN3D_ROOT}/build/lib/Release/*.a \
+ && rm -r ${OPEN3D_ROOT}/build/lib/_build_config.py.in \
+ && rm -r ${OPEN3D_ROOT}/build/cpp \
+ && rm -r ${OPEN3D_ROOT}/build/lib/ml
 # build with GPU enabled
-WORKDIR /root/Open3D/build
+WORKDIR ${OPEN3D_ROOT}/build
 RUN cmake \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
@@ -303,7 +304,7 @@ RUN cmake \
  && make install-pip-package -j$(nproc) \
  && make install -j$(nproc) \
  && pyenv rehash
-WORKDIR /root/Open3D
+WORKDIR ${OPEN3D_ROOT}
 RUN cp build/lib/python_package/pip_package/*.whl /
 
 # Compress ccache folder, move to / directory (optional)
