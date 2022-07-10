@@ -159,7 +159,7 @@ ENV OPEN3D_ROOT=/root/Open3D
 COPY . /root/Open3D
 
 WORKDIR /root
-RUN wget -q https://github.com/realitymatrix/Open3D-ML.git
+RUN git clone --depth 1 https://github.com/realitymatrix/Open3D-ML.git
 
 # WebRTC package
 # Use pre-build WebRTC binaries
