@@ -191,7 +191,7 @@ RUN which python \
     pytest=="6.0.1"
 
 # install jupyter build requirements
-RUN python -m pip install -r ${OPEN3D_ROOT}/python/requirements_jupyter_build.txt
+RUN python -m pip install -r ./python/requirements_jupyter_build.txt
 
 # install node
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
