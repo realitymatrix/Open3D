@@ -267,7 +267,7 @@ RUN mkdir build \
 RUN rm -r /root/Open3D/build/bin \
  && rm -r /root/Open3D/build/lib/Release/*.a \
  && rm -r /root/Open3D/build/lib/_build_config.py.in \
- && rm -r /root/Open3D/build/cpp
+ && rm -r /root/Open3D/build/cpp \
  && rm -r /root/Open3D/build/lib/ml
 # build with GPU enabled
 WORKDIR /root/Open3D/build
