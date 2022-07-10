@@ -156,7 +156,10 @@ RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
 # Open3D repo
 # Always keep /root/Open3D as the WORKDIR
 ENV OPEN3D_ROOT=/root/Open3D
-COPY . /root
+COPY . /root/Open3D
+
+WORKDIR /root
+RUN wget -q https://github.com/realitymatrix/Open3D-ML.git
 
 # WebRTC package
 # Use pre-build WebRTC binaries
