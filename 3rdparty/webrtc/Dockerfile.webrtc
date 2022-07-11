@@ -8,8 +8,8 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
-ENV WEBRTC_COMMIT_SHORT=4058b33
-ENV WEBRTC_COMMIT=4058b33eaf60c7ba2da44abe9294d85c2bb2a88e
+ENV WEBRTC_COMMIT_SHORT=29b42d7
+ENV WEBRTC_COMMIT=29b42d72b033c78b2f11f0d9a24b3023a9c93c50
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -40,14 +40,14 @@ RUN apt-get update && \
         wget
 
 
-# Use GCC/G++ 10
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+# # Use GCC/G++ 10
+# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
-RUN apt-get update && \
-    apt-get install -y \
-    g++-10
+# RUN apt-get update && \
+#     apt-get install -y \
+#     g++-10
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+# RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
@@ -93,6 +93,9 @@ RUN rm -r /webrtc/.cipd/
 RUN gclient sync -D --force --reset --no-history
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
+
+WORKDIR /webrtc/src/third_party/libyuv
+RUN git checkout 966768
 
 WORKDIR /
 
