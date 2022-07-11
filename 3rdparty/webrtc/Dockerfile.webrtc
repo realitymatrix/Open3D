@@ -8,9 +8,8 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
-ENV WEBRTC_COMMIT_SHORT=29159ca
-ENV WEBRTC_COMMIT=29159ca979cb6670dd02cc09a45df1404f006793
-#ENV DEPOT_TOOLS_COMMIT=4bd1522a2913faa2d9fe0a125ff567401cc81135
+ENV WEBRTC_COMMIT_SHORT=4058b33
+ENV WEBRTC_COMMIT=4058b33eaf60c7ba2da44abe9294d85c2bb2a88e
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -67,7 +66,6 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-#RUN git -C depot_tools checkout $DEPOT_TOOLS_COMMIT
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
@@ -133,23 +131,23 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
-# # Compile
-# RUN make -j$(nproc)
+# Compile
+RUN make -j$(nproc)
 
-# # Install
-# RUN make install
+# Install
+RUN make install
 
-# WORKDIR /
+WORKDIR /
 
-# # Package
-# RUN tree -L 2 webrtc_release || ls webrtc_release/*
+# Package
+RUN tree -L 2 webrtc_release || ls webrtc_release/*
 
-# RUN echo Package WebRTC
+RUN echo Package WebRTC
 
-# RUN tar -czf \
-#  "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
-#  webrtc_release
+RUN tar -czf \
+ "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
+ webrtc_release
 
-# ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
-# RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
-# RUN ls -alh ${WEBRTC_PACKAGE}
+ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
+RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
+RUN ls -alh ${WEBRTC_PACKAGE}
