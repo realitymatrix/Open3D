@@ -8,8 +8,8 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
-ENV WEBRTC_COMMIT_SHORT=4058b33
-ENV WEBRTC_COMMIT=4058b33eaf60c7ba2da44abe9294d85c2bb2a88e
+ENV WEBRTC_COMMIT_SHORT=3e8a797
+ENV WEBRTC_COMMIT=3e8a797b2e9e4d01094c4f558abb7dd525bf2cfa
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -86,7 +86,6 @@ RUN fetch --nohooks --no-history webrtc
 WORKDIR /webrtc/src
 RUN git clean -ffd
 RUN git checkout $WEBRTC_COMMIT
-RUN git fetch https://webrtc.googlesource.com/src refs/changes/87/268187/1 && git cherry-pick FETCH_HEAD
 RUN git submodule update --init --recursive
 
 RUN rm -r /webrtc/.cipd/
