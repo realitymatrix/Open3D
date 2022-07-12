@@ -122,35 +122,35 @@ COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/to
 # Copy webrtc buildfiles into webrtc dir
 RUN cp /Open3D/3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} /webrtc
 
-WORKDIR /webrtc
+# WORKDIR /webrtc
 
-RUN mkdir build
+# RUN mkdir build
 
-WORKDIR /webrtc/build
+# WORKDIR /webrtc/build
 
-# Generate ninja toolchain files
-RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
-        -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-	-DCMAKE_BUILD_TYPE=Release \
-        ..
+# # Generate ninja toolchain files
+# RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
+#         -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+# 	-DCMAKE_BUILD_TYPE=Release \
+#         ..
 
-# Compile
-RUN make -j$(nproc)
+# # Compile
+# RUN make -j$(nproc)
 
-# Install
-RUN make install
+# # Install
+# RUN make install
 
-WORKDIR /
+# WORKDIR /
 
-# Package
-RUN tree -L 2 webrtc_release || ls webrtc_release/*
+# # Package
+# RUN tree -L 2 webrtc_release || ls webrtc_release/*
 
-RUN echo Package WebRTC
+# RUN echo Package WebRTC
 
-RUN tar -czf \
- "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
- webrtc_release
+# RUN tar -czf \
+#  "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
+#  webrtc_release
 
-ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
-RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
-RUN ls -alh ${WEBRTC_PACKAGE}
+# ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
+# RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
+# RUN ls -alh ${WEBRTC_PACKAGE}
