@@ -9,7 +9,7 @@ WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
 ENV WEBRTC_COMMIT_SHORT=eacb439
-ENV WEBRTC_COMMIT=eacb43942d6f6592f0ab978f702464acea8cd090
+#ENV WEBRTC_COMMIT=eacb43942d6f6592f0ab978f702464acea8cd090
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -85,7 +85,7 @@ RUN fetch --nohooks --no-history webrtc
 
 WORKDIR /webrtc/src
 RUN git clean -ffd
-RUN git checkout $WEBRTC_COMMIT
+#RUN git checkout $WEBRTC_COMMIT
 RUN git submodule update --init --recursive
 
 RUN rm -r /webrtc/.cipd/
