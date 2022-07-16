@@ -14,11 +14,9 @@ function(get_webrtc_args WEBRTC_ARGS)
     set(WEBRTC_ARGS target_cpu="arm64"\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS libyuv_use_neon=true\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS is_clang=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS dcheck_always_on=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS clang_use_chrome_plugins=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS use_lld=false\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS is_component_build=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS symbol_level=1\n${WEBRTC_ARGS})
     set(WEBRTC_ARGS use_cxx11=true\n${WEBRTC_ARGS})
 #    set(WEBRTC_ARGS use_remoteexec=true\n${WEBRTC_ARGS})
     
@@ -43,7 +41,7 @@ function(get_webrtc_args WEBRTC_ARGS)
     # Don't use libc++ (Clang), use libstdc++ (GNU)
     # https://stackoverflow.com/a/47384787/1255535
     set(WEBRTC_ARGS use_custom_libcxx=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS use_custom_libcxx_for_host=false\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS use_custom_libcxx_for_host=true\n${WEBRTC_ARGS})
 
     # Debug/Release
     if(WEBRTC_IS_DEBUG)
