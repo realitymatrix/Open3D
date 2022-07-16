@@ -8,8 +8,8 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
-ENV WEBRTC_COMMIT_SHORT=cb56277
-ENV WEBRTC_COMMIT=cb56277a17697d45ee3435d28f01e573270e7ae4
+ENV WEBRTC_COMMIT_SHORT=62ec04d
+ENV WEBRTC_COMMIT=62ec04dccc1bdd10edd8e82b71f82a52d6210f5e
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -117,7 +117,7 @@ RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
 RUN chmod 755 gn
 
 # Enable build with GNU toolchain via hack
-#COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/toolchain/linux/BUILD.gn
+COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/toolchain/linux/BUILD.gn
 
 # Copy webrtc buildfiles into webrtc dir
 RUN cp /Open3D/3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} /webrtc
