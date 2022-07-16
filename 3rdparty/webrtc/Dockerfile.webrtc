@@ -94,8 +94,8 @@ RUN gclient sync -D --force --reset --no-history
 
 RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcache
 
-WORKDIR /webrtc/src/third_party/libyuv
-RUN git checkout 966768
+#WORKDIR /webrtc/src/third_party/libyuv
+#RUN git checkout 966768
 
 WORKDIR /
 
