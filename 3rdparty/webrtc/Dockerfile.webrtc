@@ -42,13 +42,13 @@ RUN apt-get update && \
 
 
 # Use GCC/G++ 10
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
-RUN apt-get update && \
-    apt-get install -y \
-    g++-10
+# RUN apt-get update && \
+#     apt-get install -y \
+#     g++-10
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+# RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
@@ -98,6 +98,16 @@ RUN curl "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" -o skipcac
 #WORKDIR /webrtc/src/third_party/libyuv
 #RUN git checkout 966768
 
+# Replace LLVM
+WORKDIR /webrtc/src/third_party/llvm-build/
+RUN rm -r /webrtc/src/third_party/llvm-build/Release+Asserts/
+RUN wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.5/clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+RUN tar -xf clang+llvm-14.0.5-aarch64-linux-gnu.tar.xz
+RUN mv ./clang+llvm-14.0.5-aarch64-linux-gnu ./Release+Asserts
+ENV PATH="/webrtc/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
+RUN echo ${PATH}
+RUN clang++ --version
+
 WORKDIR /
 
 # GN
@@ -118,7 +128,7 @@ RUN wget -q https://github.com/realitymatrix/gn/releases/download/v2042/gn
 RUN chmod 755 gn
 
 # Enable build with GNU toolchain via hack
-COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/toolchain/linux/BUILD.gn
+#COPY /Open3D/3rdparty/webrtc/build/toolchain/linux/BUILD.gn /webrtc/src/build/toolchain/linux/BUILD.gn
 
 # Copy webrtc buildfiles into webrtc dir
 RUN cp /Open3D/3rdparty/webrtc/{CMakeLists.txt,webrtc_common.cmake} /webrtc
