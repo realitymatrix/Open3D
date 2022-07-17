@@ -27,6 +27,7 @@ RUN apt-get update && \
         build-essential \
         ca-certificates \
         git \
+        nano \
         gnupg \
         libglib2.0-dev \
         python \
