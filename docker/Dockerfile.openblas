@@ -126,9 +126,9 @@ RUN apt-get update -y && apt-get install -y \
     python-openssl \
     git \
  && rm -rf /var/lib/apt/lists/*
-RUN git clone --depth=1 https://github.com/pyenv/pyenv.git /root/.pyenv
-ENV PYENV_ROOT="/root/.pyenv"
-ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
+# RUN git clone --depth=1 https://github.com/pyenv/pyenv.git /root/.pyenv
+# ENV PYENV_ROOT="/root/.pyenv"
+# ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
 
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
@@ -182,8 +182,8 @@ RUN ln -s /usr/bin/python3 /usr/local/bin/python \
  && ln -s /usr/bin/pip3 /usr/local/bin/pip
 
 # Build Python wheel
-RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
-RUN pyenv local $(pyenv versions | grep ${PYTHON_VERSION})
+# RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
+# RUN pyenv local $(pyenv versions | grep ${PYTHON_VERSION})
 RUN which python \
  && python --version \
  && python -m pip install -U \
@@ -308,8 +308,8 @@ RUN cmake \
     .. \
  && make -j$(nproc) \
  && make install-pip-package -j$(nproc) \
- && make install -j$(nproc) \
- && pyenv rehash
+ && make install -j$(nproc)
+# && pyenv rehash
 WORKDIR ${OPEN3D_ROOT}
 RUN cp build/lib/python_package/pip_package/*.whl /
 
