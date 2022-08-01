@@ -4,7 +4,7 @@
 
 include(ExternalProject)
 
-set(WEBRTC_VER bf2a70a_linux)
+set(WEBRTC_VER 5262fd8_linux_clang)
 if (APPLE)
     set(WEBRTC_URL
         https://github.com/isl-org/open3d_downloads/releases/download/webrtc/webrtc_${WEBRTC_VER}_macos_10.14.tar.gz
@@ -25,10 +25,9 @@ elseif (WIN32)
 else()  # Linux
     if(GLIBCXX_USE_CXX11_ABI)
         set(WEBRTC_URL
-            #https://github.com/realitymatrix/webrtc/releases/download/${WEBRTC_VER}/webrtc_${WEBRTC_VER}_cxx-abi-1.tar.gz
-            https://github.com/realitymatrix/webrtc/releases/download/bf2a70a_linux_gcc/webrtc_bf2a70a_linux_cxx-abi-1.tar.gz
+        https://github.com/realitymatrix/webrtc/releases/download/5262fd8_linux_clang/webrtc_5262fd8_linux_cxx-abi-1.tar.gz
         )
-        set(WEBRTC_SHA256 b328f5e56355b9716abc532414da7db495c830f1420fb5a77db6483afe24767b)
+        set(WEBRTC_SHA256 ac3c5e0514aae5a0f5871cc0d82a1a9d5d81d08430e0331d234043774d76016f)
     else()
         set(WEBRTC_URL
             https://github.com/isl-org/open3d_downloads/releases/download/webrtc-v3/webrtc_${WEBRTC_VER}_cxx-abi-0.tar.gz
