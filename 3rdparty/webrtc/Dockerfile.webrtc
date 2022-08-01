@@ -41,7 +41,7 @@ RUN apt-get update && \
         wget
 
 
-Use GCC/G++ 10
+# Use GCC/G++ 10
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
 RUN apt-get update && \
