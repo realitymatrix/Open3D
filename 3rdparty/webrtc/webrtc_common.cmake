@@ -41,7 +41,7 @@ function(get_webrtc_args WEBRTC_ARGS)
     # Don't use libc++ (Clang), use libstdc++ (GNU)
     # https://stackoverflow.com/a/47384787/1255535
     set(WEBRTC_ARGS use_custom_libcxx=false\n${WEBRTC_ARGS})
-    set(WEBRTC_ARGS use_custom_libcxx_for_host=true\n${WEBRTC_ARGS})
+    set(WEBRTC_ARGS use_custom_libcxx_for_host=false\n${WEBRTC_ARGS})
 
     # Debug/Release
     if(WEBRTC_IS_DEBUG)
