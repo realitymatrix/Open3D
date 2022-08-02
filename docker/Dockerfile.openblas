@@ -4,7 +4,7 @@ ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r32.7.1-py3
 ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 FROM ${ML_IMAGE} as ml
-#FROM ${WEBRTC_IMAGE} as webrtc
+FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
 
 # For the rest of this Dockerfile
