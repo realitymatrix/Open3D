@@ -32,7 +32,6 @@ RUN if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not sp
 
 # Prevent interactive inputs when installing packages
 ENV DEBIAN_FRONTEND=noninteractive
-#ENV TZ=America/Los_Angeles
 ENV SUDO=command
 ENV HOME="/root"
 ENV CUDA_HOME="/usr/local/cuda"
@@ -40,7 +39,7 @@ ENV PATH="/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 ENV LD_PRELOAD="/usr/lib/aarch64-linux-gnu/libgomp.so.1"
 ENV LLVM_CONFIG="/usr/bin/llvm-config-9"
-#ARG MAKEFLAGS
+ENV NPROC=1
 
 # Minimal dependencies for running Docker
 # wget    : for downloading
@@ -277,7 +276,7 @@ RUN mkdir build \
     #-DBUILD_LIBREALSENSE=ON \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
     .. \
- && make -j$(nproc)
+ && make -j${NPROC}
 
 RUN rm -r ${OPEN3D_ROOT}/build/bin \
  && rm -r ${OPEN3D_ROOT}/build/lib/Release/*.a \
