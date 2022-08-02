@@ -1,6 +1,7 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
 ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r32.7.1-py3
+# download from cloud repository for now, not ready for multistage build
 #ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 FROM ${ML_IMAGE} as ml
@@ -241,7 +242,7 @@ ENV BUILD_LIBREALSENSE=ON
 # build open3d with GPU
 RUN mkdir build \
  && cd build \
- && cmake \
+ && cmake VERBOSE=1 \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DBUILD_UNIT_TESTS=${BUILD_UNIT_TESTS} \
@@ -277,7 +278,7 @@ RUN rm -r ${OPEN3D_ROOT}/build/bin \
  && rm -r ${OPEN3D_ROOT}/build/lib/ml
 # build with GPU enabled
 WORKDIR ${OPEN3D_ROOT}/build
-RUN cmake \
+RUN cmake VERBOSE=1 \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DBUILD_UNIT_TESTS=${BUILD_UNIT_TESTS} \

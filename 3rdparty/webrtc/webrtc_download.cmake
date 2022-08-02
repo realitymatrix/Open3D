@@ -27,7 +27,7 @@ else()  # Linux
         set(WEBRTC_URL
             https://github.com/realitymatrix/webrtc/releases/download/cb56277_linux_gcc12/webrtc_cb56277_linux_cxx-abi-1.tar.gz
         )
-        set(WEBRTC_SHA256 ac3c5e0514aae5a0f5871cc0d82a1a9d5d81d08430e0331d234043774d76016f)
+        set(WEBRTC_SHA256 10f7a4adfc87f25c30ee1a7f180001f507d8d0bb9b96dbf3d55bbf6bfa82f19f)
     else()
         set(WEBRTC_URL
             https://github.com/isl-org/open3d_downloads/releases/download/webrtc-v3/webrtc_${WEBRTC_VER}_cxx-abi-0.tar.gz
