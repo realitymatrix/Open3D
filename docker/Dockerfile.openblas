@@ -59,6 +59,7 @@ RUN apt-get update && apt-get install -y \
 # Minimal dependencies for building
 RUN apt-get update && apt-get install -y \
     software-properties-common \
+    apt-transport-https \
     build-essential \
     apt-utils \
     clang-7 \
