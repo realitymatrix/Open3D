@@ -31,10 +31,10 @@ RUN apt-get update && \
         gnupg \
         libglib2.0-dev \
         python \
-        python-pip \
+        # python-pip \
         python-setuptools \
         python3-setuptools \
-        python-wheel \
+        # python-wheel \
         software-properties-common \
         tree \
         curl \
