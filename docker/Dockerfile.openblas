@@ -66,6 +66,8 @@ RUN apt-get update && apt-get install -y \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
+# GCC with cxx17 support is required for webrtc
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 RUN g++ --version
 
 # Install ccache after build-essential (gcc, g++).
