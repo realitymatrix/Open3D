@@ -62,8 +62,11 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     apt-utils \
     clang-7 \
+    g++-8 \
     git  \
  && rm -rf /var/lib/apt/lists/*
+
+RUN g++ --version
 
 # Install ccache after build-essential (gcc, g++).
 # Open3D CMake can detect and use ccache automatically, except for OpenBLAS.
