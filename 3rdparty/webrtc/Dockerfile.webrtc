@@ -30,7 +30,7 @@ RUN apt-get update && \
         nano \
         gnupg \
         libglib2.0-dev \
-        python \
+        # python \
         # python-pip \
         python-setuptools \
         python3-setuptools \
