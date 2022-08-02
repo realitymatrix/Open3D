@@ -39,7 +39,7 @@ ENV PATH="/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 ENV LD_PRELOAD="/usr/lib/aarch64-linux-gnu/libgomp.so.1"
 ENV LLVM_CONFIG="/usr/bin/llvm-config-9"
-ENV NPROC=1
+ENV NPROC=8
 
 # Minimal dependencies for running Docker
 # wget    : for downloading
@@ -314,9 +314,9 @@ RUN cmake VERBOSE=1 \
     #-DBUILD_LIBREALSENSE=ON \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
     .. \
- && make -j$(nproc) \
- && make install-pip-package -j$(nproc) \
- && make install -j$(nproc)
+ && make -j${NPROC} \
+ && make install-pip-package -j${NPROC} \
+ && make install -j${NPROC}
 # && pyenv rehash
 WORKDIR ${OPEN3D_ROOT}
 RUN cp build/lib/python_package/pip_package/*.whl /
