@@ -60,6 +60,7 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     build-essential \
     apt-utils \
+    clang++-9 \
     llvm-9-dev \
     llvm-9 \
     git  \
