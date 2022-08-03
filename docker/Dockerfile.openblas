@@ -38,7 +38,7 @@ ENV CUDA_HOME="/usr/local/cuda"
 ENV PATH="/usr/bin:/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 ENV LD_PRELOAD="/usr/lib/aarch64-linux-gnu/libgomp.so.1"
-ENV LLVM_CONFIG="/usr/bin/llvm-config-9"
+ENV LLVM_CONFIG="/usr/bin/llvm-config-10"
 ENV NPROC=8
 
 # Minimal dependencies for running Docker
@@ -60,9 +60,9 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     build-essential \
     apt-utils \
-    clang-11 \
-    llvm-11-dev \
-    llvm-11 \
+    clang-10 \
+    llvm-10-dev \
+    llvm-10 \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
@@ -84,15 +84,15 @@ ENV PATH="/usr/lib/ccache:${PATH}"
 RUN mkdir -p /usr/lib/ccache \
  && ln -sf $(which ccache) /usr/lib/ccache/gcc \
  && ln -sf $(which ccache) /usr/lib/ccache/g++ \
- && ln -sf $(which ccache) /usr/lib/ccache/clang-11
+ && ln -sf $(which ccache) /usr/lib/ccache/clang-10
 RUN echo ${PATH} \
  && ls -alh /usr/lib/ccache \
  && echo "gcc=$(which gcc)" \
  && gcc --version \
  && echo "g++=$(which g++)" \
  && g++ --version \
- && echo "clang-11=$(which clang-11)" \
- && clang-11 --version
+ && echo "clang-10=$(which clang-10)" \
+ && clang-10 --version
 
 # Uncomment this line to always fetch the latest ccache
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
