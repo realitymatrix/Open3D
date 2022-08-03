@@ -25,7 +25,7 @@ elseif (WIN32)
 else()  # Linux
     if(GLIBCXX_USE_CXX11_ABI)
         set(WEBRTC_URL
-            https://github.com/realitymatrix/webrtc/releases/download/cb56277_linux_gcc12/webrtc_cb56277_linux_cxx-abi-1.tar.gz
+            https://github.com/realitymatrix/webrtc/releases/download/47be149_linux/webrtc_47be149_linux_cxx-abi-1.tar.gz
         )
         set(WEBRTC_SHA256 e32f2c892f6b730f260ba88786aa91b628ccb18a9fb1dded6ef8519d1180d299)
     else()
