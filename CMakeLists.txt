@@ -282,7 +282,7 @@ endif()
 if (BUILD_SYCL_MODULE)
     set(CMAKE_CXX_STANDARD 17)
 else()
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 17)
 endif()
 
 # FIXME: Remove this workaround once a fixed Visual Studio 16.10 version is released.
