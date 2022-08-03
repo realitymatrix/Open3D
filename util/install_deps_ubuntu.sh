@@ -20,8 +20,8 @@ dependencies=(
     python3-dev
     # Filament build-from-source deps
     libsdl2-dev
-    libc++-9-dev
-    libc++abi-9-dev
+    libc++-11-dev
+    libc++abi-11-dev
     ninja-build
     libxi-dev
     # OpenBLAS build-from-source deps

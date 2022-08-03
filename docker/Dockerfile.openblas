@@ -60,9 +60,9 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     build-essential \
     apt-utils \
-    clang-9 \
-    llvm-9-dev \
-    llvm-9 \
+    clang-11 \
+    llvm-11-dev \
+    llvm-11 \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
@@ -84,15 +84,15 @@ ENV PATH="/usr/lib/ccache:${PATH}"
 RUN mkdir -p /usr/lib/ccache \
  && ln -sf $(which ccache) /usr/lib/ccache/gcc \
  && ln -sf $(which ccache) /usr/lib/ccache/g++ \
- && ln -sf $(which ccache) /usr/lib/ccache/clang-9
+ && ln -sf $(which ccache) /usr/lib/ccache/clang-11
 RUN echo ${PATH} \
  && ls -alh /usr/lib/ccache \
  && echo "gcc=$(which gcc)" \
  && gcc --version \
  && echo "g++=$(which g++)" \
  && g++ --version \
- && echo "clang-9=$(which clang-9)" \
- && clang-9 --version
+ && echo "clang-11=$(which clang-11)" \
+ && clang-11 --version
 
 # Uncomment this line to always fetch the latest ccache
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
