@@ -61,8 +61,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     apt-utils \
     clang-7 \
-    llvm-9 \
-    llvm-9-dev \
+    # llvm-9 \
+    # llvm-9-dev \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
@@ -222,6 +222,7 @@ RUN npm install --location=global \
 # Build Variables
 ENV USE_BLAS=ON
 ENV CMAKE_BUILD_TYPE=Release
+ENV BUILD_SYCL_MODULE=OFF
 ENV BUILD_UNIT_TESTS=OFF
 ENV BUILD_EXAMPLES=ON
 ENV BUILD_SHARED_LIBS=ON
@@ -254,6 +255,7 @@ RUN mkdir build \
  && cmake VERBOSE=1 \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DBUILD_SYCL_MODULE=${BUILD_SYCL_MODULE} \
     -DBUILD_UNIT_TESTS=${BUILD_UNIT_TESTS} \
     -DBUILD_EXAMPLES=${BUILD_EXAMPLES} \
     -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
@@ -290,6 +292,7 @@ WORKDIR ${OPEN3D_ROOT}/build
 RUN cmake VERBOSE=1 \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DBUILD_SYCL_MODULE=${BUILD_SYCL_MODULE} \
     -DBUILD_UNIT_TESTS=${BUILD_UNIT_TESTS} \
     -DBUILD_EXAMPLES=${BUILD_EXAMPLES} \
     -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
