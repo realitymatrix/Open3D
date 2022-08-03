@@ -60,6 +60,8 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     build-essential \
     apt-utils \
+    llvm-9-dev \
+    llvm-9 \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
@@ -122,8 +124,6 @@ RUN apt-get update -y && apt-get install -y \
     libreadline-dev \
     libsqlite3-dev \
     wget \
-    llvm-9 \
-    llvm-9-dev \
     libncurses5-dev \
     libncursesw5-dev \
     xz-utils \
