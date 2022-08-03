@@ -60,9 +60,9 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     build-essential \
     apt-utils \
-    clang-7 \
-    # llvm-9 \
-    # llvm-9-dev \
+    clang-9 \
+    llvm-9 \
+    llvm-9-dev \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
