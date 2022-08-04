@@ -31,8 +31,7 @@ RUN apt-get update && \
         nano \
         gnupg \
         libglib2.0-dev \
-        libncurses5 \
-        libssl1.1 \
+        libtinfo5 \
         # python \
         # python-pip \
         python-setuptools \
