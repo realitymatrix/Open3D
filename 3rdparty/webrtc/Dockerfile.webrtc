@@ -30,8 +30,7 @@ RUN apt-get update && \
         git \
         nano \
         gnupg \
-        libglib2.0-dev \
-        libtinfo5 \
+        libncurses5 \
         # python \
         # python-pip \
         python-setuptools \
