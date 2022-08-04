@@ -3,6 +3,8 @@ FROM arm64v8/ubuntu:20.04
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
