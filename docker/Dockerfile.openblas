@@ -173,8 +173,8 @@ RUN git clone --depth 1 https://github.com/realitymatrix/Open3D-ML.git
 # WebRTC package
 # Use pre-build WebRTC binaries
 WORKDIR /root/Open3D/3rdparty_downloads/webrtc/
-# RUN wget -q https://github.com/realitymatrix/webrtc/releases/download/cb56277_linux_gcc12/webrtc_cb56277_linux_cxx-abi-1.tar.gz
-COPY --from=webrtc /webrtc_master_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
+RUN wget -q https://github.com/realitymatrix/webrtc/releases/download/master_linux/webrtc_master_linux_cxx-abi-1.tar.gz
+# COPY --from=webrtc /webrtc_master_linux_cxx-abi-1.tar.gz /root/Open3D/3rdparty_downloads/webrtc/
 WORKDIR ${OPEN3D_ROOT}
 
 # Python virtual environment is needed, version passed as ARG
