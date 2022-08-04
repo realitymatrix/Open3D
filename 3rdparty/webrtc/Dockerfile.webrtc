@@ -1,9 +1,10 @@
-FROM arm64v8/ubuntu:20.04
+FROM arm64v8/ubuntu:22.10
 
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Los_Angeles
 
 ARG SUDO=command
 COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
