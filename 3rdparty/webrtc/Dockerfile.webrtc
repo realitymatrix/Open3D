@@ -69,10 +69,9 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-WORKDIR /depot_tools
-RUN git checkout ${DEPOT_TOOLS_COMMIT}
-
-WORKDIR /
+# WORKDIR /depot_tools
+# RUN git checkout ${DEPOT_TOOLS_COMMIT}
+# WORKDIR /
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
