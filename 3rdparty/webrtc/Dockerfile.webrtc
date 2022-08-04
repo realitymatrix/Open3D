@@ -32,6 +32,7 @@ RUN apt-get update && \
         gnupg \
         libglib2.0-dev \
         libncurses5 \
+        libssl1.1 \
         # python \
         # python-pip \
         python-setuptools \
