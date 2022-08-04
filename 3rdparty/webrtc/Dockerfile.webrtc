@@ -44,13 +44,13 @@ RUN apt-get update && \
 # # Use GCC/G++ 12
 # RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 
-RUN apt-get update && \
-    apt-get install -y \
-    g++-12
+# RUN apt-get update && \
+#     apt-get install -y \
+#     g++-12
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 12 --slave /usr/bin/g++ g++ /usr/bin/g++-12
+# RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 12 --slave /usr/bin/g++ g++ /usr/bin/g++-12
 
-RUN g++ --version
+# RUN g++ --version
 
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc \
         2>/dev/null | gpg --dearmor - | sed -n 'w /etc/apt/trusted.gpg.d/kitware.gpg'
