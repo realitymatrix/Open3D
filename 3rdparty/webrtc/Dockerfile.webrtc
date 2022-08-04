@@ -8,8 +8,9 @@ COPY Open3D/3rdparty/webrtc /Open3D/3rdparty/webrtc
 WORKDIR /Open3D/
 
 # Set WebRTC version for Open3D consumable
-ENV WEBRTC_COMMIT_SHORT=master
-# ENV WEBRTC_COMMIT=47be1493b670b85a640ad1da02be66ee1a4446d3
+ENV WEBRTC_COMMIT_SHORT=60e6748
+ENV WEBRTC_COMMIT=60e674842ebae283cc6b2627f4b6f2f8186f3317
+ENV DEPOT_TOOLS_COMMIT=e1a98941d3ab10549be6d82d0686bb0fb91ec903
 
 ENV GLIBCXX_USE_CXX11_ABI=1
 
@@ -68,6 +69,10 @@ RUN apt-get clean && \
 WORKDIR /
 
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+WORKDIR /depot_tools
+RUN git checkout ${DEPOT_TOOLS_COMMIT}
+
+WORKDIR /
 
 RUN chmod 755 /depot_tools/gclient
 RUN chmod 755 /depot_tools/fetch
@@ -87,7 +92,7 @@ RUN fetch --nohooks --no-history webrtc
 
 WORKDIR /webrtc/src
 RUN git clean -ffd
-# RUN git checkout $WEBRTC_COMMIT
+RUN git checkout ${WEBRTC_COMMIT}
 RUN git submodule update --init --recursive
 
 RUN rm -r /webrtc/.cipd/
@@ -146,23 +151,23 @@ RUN cmake -DCMAKE_INSTALL_PREFIX=../../webrtc_release .. \
 	-DCMAKE_BUILD_TYPE=Release \
         ..
 
-# Compile
-RUN make -j$(nproc)
+# # Compile
+# RUN make -j$(nproc)
 
-# Install
-RUN make install
+# # Install
+# RUN make install
 
-WORKDIR /
+# WORKDIR /
 
-# Package
-RUN tree -L 2 webrtc_release || ls webrtc_release/*
+# # Package
+# RUN tree -L 2 webrtc_release || ls webrtc_release/*
 
-RUN echo Package WebRTC
+# RUN echo Package WebRTC
 
-RUN tar -czf \
- "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
- webrtc_release
+# RUN tar -czf \
+#  "/webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz" \
+#  webrtc_release
 
-ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
-RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
-RUN ls -alh ${WEBRTC_PACKAGE}
+# ENV WEBRTC_PACKAGE="webrtc_${WEBRTC_COMMIT_SHORT}_linux_cxx-abi-${GLIBCXX_USE_CXX11_ABI}.tar.gz"
+# RUN cmake -E sha256sum ${WEBRTC_PACKAGE} | tee "checksum_${WEBRTC_PACKAGE%%.*}.txt"
+# RUN ls -alh ${WEBRTC_PACKAGE}
