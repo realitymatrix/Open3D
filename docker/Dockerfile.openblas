@@ -11,7 +11,7 @@ FROM ${BASE_IMAGE}
 SHELL ["/bin/bash", "-c"]
 
 # Import ml dependencies
-# COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
+COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
 COPY --from=ml /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
 
 # Needed for wget
