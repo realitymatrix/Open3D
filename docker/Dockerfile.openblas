@@ -126,6 +126,7 @@ RUN apt-get update -y && apt-get install -y \
     libsqlite3-dev \
     wget \
     libtinfo5 \
+    libncurses5 \
     libncurses5-dev \
     libncursesw5-dev \
     xz-utils \
