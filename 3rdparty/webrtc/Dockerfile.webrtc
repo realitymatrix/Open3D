@@ -1,4 +1,4 @@
-FROM arm64v8/ubuntu:22.10
+FROM nvcr.io/nvidia/l4t-base:r34.1.1
 
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
