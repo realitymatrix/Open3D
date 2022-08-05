@@ -66,13 +66,13 @@ RUN apt-get update && apt-get install -y \
     git  \
  && rm -rf /var/lib/apt/lists/*
 
-# GCC with cxx17 support is required for webrtc
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
-RUN apt-get update && \
-    apt-get install -y \
-    g++-9
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr/bin/g++ g++ /usr/bin/g++-9
-RUN g++ --version
+# # GCC with cxx17 support is required for webrtc
+# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+# RUN apt-get update && \
+#     apt-get install -y \
+#     g++-9
+# RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+# RUN g++ --version
 
 # Install ccache after build-essential (gcc, g++).
 # Open3D CMake can detect and use ccache automatically, except for OpenBLAS.
