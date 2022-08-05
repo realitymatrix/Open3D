@@ -132,6 +132,12 @@ RUN apt-get update -y && apt-get install -y \
 # ENV PYENV_ROOT="/root/.pyenv"
 # ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
 
+# CUDA Toolkit Install
+RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/sbsa/cuda-keyring_1.0-1_all.deb \
+&& dpkg -i cuda-keyring*.deb \
+&& apt-get update \
+&& apt-get -y install cuda
+
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
 ENV CMAKE_VER_NUM=v3.22.1
