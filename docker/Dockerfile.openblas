@@ -1,6 +1,6 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r32.7.1-py3
+ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
 ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 FROM ${ML_IMAGE} as ml
@@ -11,8 +11,8 @@ FROM ${BASE_IMAGE}
 SHELL ["/bin/bash", "-c"]
 
 # Import ml dependencies
-COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
-COPY --from=ml /usr/local/lib/python3.6/dist-packages/ /usr/local/lib/python3.6/dist-packages/
+# COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
+COPY --from=ml /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
 
 # Needed for wget
 RUN apt-get update && apt-get install -y \
@@ -241,7 +241,7 @@ ENV BUILD_JUPYTER_EXTENSION=ON
 ENV BUILD_PYTHON_MODULE=ON
 ENV CMAKE_INSTALL_PREFIX="~/open3d_install"
 ENV DBUILD_TENSORFLOW_OPS=OFF
-ENV Tensorflow_FRAMEWORK_LIB="/usr/local/lib/python3.6/dist-packages/tensorflow_core/libtensorflow_framework.so.1"
+ENV Tensorflow_FRAMEWORK_LIB="/usr/local/lib/python3.8/dist-packages/tensorflow_core/libtensorflow_framework.so.1"
 ENV BUILD_PYTORCH_OPS=OFF
 ENV OPEN3D_ML_ROOT="/root/Open3D-ML"
 ENV BUNDLE_OPEN3D_ML=OFF
