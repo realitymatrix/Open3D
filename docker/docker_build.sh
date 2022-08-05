@@ -104,7 +104,7 @@ openblas_export_env() {
     elif [[ "arm64" =~ ^($options)$ ]]; then
         echo "[openblas_export_env()] platform ARM64"
         export DOCKER_TAG=open3d-ci:openblas-arm64
-        export BASE_IMAGE=arm64v8/ubuntu:18.04
+        export BASE_IMAGE=arm64v8/ubuntu:22.10
         export CMAKE_VERSION=${CMAKE_VERSION_AARCH64}
         export CCACHE_TAR_NAME=open3d-ci-openblas-arm64
     else
