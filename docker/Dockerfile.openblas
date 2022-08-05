@@ -281,10 +281,12 @@ RUN mkdir build \
  && make -j${NPROC}
 
 RUN rm -r ${OPEN3D_ROOT}/build/bin \
- && rm -r ${OPEN3D_ROOT}/build/lib/Release/*.a \
- && rm -r ${OPEN3D_ROOT}/build/lib/_build_config.py.in \
  && rm -r ${OPEN3D_ROOT}/build/cpp \
- && rm -r ${OPEN3D_ROOT}/build/lib/ml
+ && rm -r ${OPEN3D_ROOT}/build/lib/Release/*.a \
+ && rm -r ${OPEN3D_ROOT}/build/lib/_build_config.py.in
+#  && rm -r ${OPEN3D_ROOT}/build/lib/ml
+
+
 # build with GPU enabled
 WORKDIR ${OPEN3D_ROOT}/build
 RUN cmake VERBOSE=1 \
