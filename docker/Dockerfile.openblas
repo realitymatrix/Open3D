@@ -1,6 +1,6 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
+ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r32.7.1-py3
 ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 FROM ${ML_IMAGE} as ml
