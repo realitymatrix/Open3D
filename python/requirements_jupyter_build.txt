@@ -4,7 +4,6 @@ pygments>=2.7.4
 jupyter_packaging==0.10.6
 jupyterlab_widgets
 jupyterlab==3.2.5
-jupyter
 configargparse
 Cython
 packaging

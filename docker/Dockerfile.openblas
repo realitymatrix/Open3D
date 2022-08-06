@@ -1,9 +1,9 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
+# ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
 ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
-FROM ${ML_IMAGE} as ml
+# FROM ${ML_IMAGE} as ml
 FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
 
@@ -11,8 +11,8 @@ FROM ${BASE_IMAGE}
 SHELL ["/bin/bash", "-c"]
 
 # Import ml dependencies
-COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
-COPY --from=ml /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
+# COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
+# COPY --from=ml /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
 
 # Needed for wget
 RUN apt-get update && apt-get install -y \
@@ -132,11 +132,11 @@ RUN apt-get update -y && apt-get install -y \
 # ENV PYENV_ROOT="/root/.pyenv"
 # ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
 
-# CUDA Toolkit Install
-RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/sbsa/cuda-keyring_1.0-1_all.deb \
-&& dpkg -i cuda-keyring*.deb \
-&& apt-get update \
-&& apt-get -y install cuda
+# # CUDA Toolkit Install
+# RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/sbsa/cuda-keyring_1.0-1_all.deb \
+# && dpkg -i cuda-keyring*.deb \
+# && apt-get update \
+# && apt-get -y install cuda
 
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
