@@ -1,10 +1,10 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
 # ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
-ARG WEBRTC_IMAGE=open3d-webrtc:abi1
+# ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
 # FROM ${ML_IMAGE} as ml
-FROM ${WEBRTC_IMAGE} as webrtc
+# FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
 
 # For the rest of this Dockerfile
@@ -35,7 +35,7 @@ ENV HOME="/root"
 ENV CUDA_HOME="/usr/local/cuda"
 ENV PATH="/usr/bin:/usr/local/cuda/bin:/usr/lib/aarch64-linux-gnu:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
-ENV LD_PRELOAD="/root/Open3D/build/lib/Release/libOpen3D.so"
+# ENV LD_PRELOAD="/root/Open3D/build/lib/Release/libOpen3D.so"
 ENV LLVM_CONFIG="/usr/bin/llvm-config-10"
 ENV NPROC=8
 
@@ -129,12 +129,6 @@ RUN apt-get update -y && apt-get install -y \
 # ENV PYENV_ROOT="/root/.pyenv"
 # ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
 
-# # CUDA Toolkit Install
-# RUN wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/sbsa/cuda-keyring_1.0-1_all.deb \
-# && dpkg -i cuda-keyring*.deb \
-# && apt-get update \
-# && apt-get -y install cuda
-
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
 ENV CMAKE_VER_NUM=v3.22.1
@@ -160,14 +154,14 @@ RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
  && rm -rf /var/lib/apt/lists/*
 
 # Python and dependencies
-RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
-RUN pyenv global $(pyenv versions | grep ${PYTHON_VERSION})
+# RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
+# RUN pyenv global $(pyenv versions | grep ${PYTHON_VERSION})
 COPY ./python/requirements*.txt /root/Open3D/python/
-RUN which python \
- && python --version \
- && python -m pip install -U -r /root/Open3D/python/requirements.txt \
-  -r /root/Open3D/python/requirements_build.txt \
-  -r /root/Open3D/python/requirements_test.txt
+RUN which python3 \
+ && python3 --version \
+ && python3 -m pip install -U -r /root/Open3D/python/requirements.txt \
+  -r /root/Open3D/python/requirements_build.txt
+#   -r /root/Open3D/python/requirements_test.txt
 
 # Open3D repo
 # Always keep /root/Open3D as the WORKDIR
@@ -192,9 +186,9 @@ RUN apt-get update && apt-get install -y \
     python3-tornado \
     python3-setuptools \
  && rm -rf /var/lib/apt/lists/*
-RUN ln -s /usr/bin/python3 /usr/local/bin/python \
- && ln -s /usr/bin/python3-config /usr/local/bin/python-config \
- && ln -s /usr/bin/pip3 /usr/local/bin/pip
+# RUN ln -s /usr/bin/python3 /usr/local/bin/python \
+#  && ln -s /usr/bin/python3-config /usr/local/bin/python-config \
+#  && ln -s /usr/bin/pip3 /usr/local/bin/pip
 
 # Build Python wheel
 # RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
