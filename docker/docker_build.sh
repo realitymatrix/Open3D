@@ -106,7 +106,7 @@ openblas_export_env() {
     elif [[ "arm64" =~ ^($options)$ ]]; then
         echo "[openblas_export_env()] platform ARM64"
         export DOCKER_TAG=open3d-ci:openblas-arm64
-        export BASE_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
+        export BASE_IMAGE=nvcr.io/nvidia/l4t-ml:r35.1.0-py3
         export CMAKE_VERSION=${CMAKE_VERSION_AARCH64}
     else
         echo "Invalid platform."
