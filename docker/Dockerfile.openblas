@@ -1,18 +1,17 @@
 # FROM must be called before other ARGS except for ARG BASE_IMAGE
 ARG BASE_IMAGE
-# ARG ML_IMAGE=nvcr.io/nvidia/l4t-ml:r34.1.1-py3
+# ARG TF_IMAGE=nvcr.io/nvidia/l4t-tensorflow:r35.1.0-tf2.9-py3
 # ARG WEBRTC_IMAGE=open3d-webrtc:abi1
 
-# FROM ${ML_IMAGE} as ml
+# FROM ${TF_IMAGE} as tf
 # FROM ${WEBRTC_IMAGE} as webrtc
 FROM ${BASE_IMAGE}
 
 # For the rest of this Dockerfile
 SHELL ["/bin/bash", "-c"]
 
-# Import ml dependencies
-# COPY --from=ml /usr/local/lib/python2.7/dist-packages/ /usr/local/lib/python2.7/dist-packages/
-# COPY --from=ml /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
+# Import TF2 dependencies
+# COPY --from=tf /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
 
 # Needed for wget
 RUN apt-get update && apt-get install -y \
@@ -34,9 +33,7 @@ ENV SUDO=command
 ENV HOME="/root"
 ENV CUDA_HOME="/usr/local/cuda"
 ENV PATH="/usr/bin:/usr/local/cuda/bin:/usr/lib/aarch64-linux-gnu:${PATH}"
-ENV PATH="/usr/bin/python3:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
-# ENV LD_PRELOAD="/root/Open3D/build/lib/Release/libOpen3D.so"
 ENV LLVM_CONFIG="/usr/bin/llvm-config-10"
 ENV NPROC=8
 
@@ -170,7 +167,7 @@ ENV OPEN3D_ROOT=/root/Open3D
 COPY . /root/Open3D
 
 WORKDIR /root
-RUN git clone --depth 1 https://github.com/realitymatrix/Open3D-ML.git
+# RUN git clone --depth 1 https://github.com/realitymatrix/Open3D-ML.git
 
 # WebRTC package
 # Use pre-build WebRTC binaries
@@ -206,6 +203,25 @@ RUN which python3 \
 # install jupyter build requirements
 RUN python3 -m pip install -r ./python/requirements_jupyter_build.txt
 
+WORKDIR ${HOME}
+
+# Install Kineto (part of PyTorch Profiler) from source
+RUN git clone --recursive https://github.com/pytorch/kineto.git
+WORKDIR ${HOME}/kineto/libkineto
+RUN mkdir build \
+ && cd build \
+ && cmake VERBOSE=1 \
+	-DKINETO_BUILD_TESTS=OFF \
+	-DCUDA_SOURCE_DIR=${CUDA_HOME} \
+	.. \
+ && make -j${NPROC} \
+ && make install -j${NPROC}
+# Install Pytorch Profiler Tensorboard Plugin
+WORKDIR ${HOME}/kineto/tb_plugin
+RUN python3 -m pip install .
+
+WORKDIR ${OPEN3D_ROOT}
+
 # install node
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get update && \
@@ -239,21 +255,24 @@ ENV CMAKE_CUDA_COMPILER="/usr/local/cuda/bin/nvcc"
 ENV BUILD_ISPC_MODULE=ON
 ENV CMAKE_ISPC_COMPILER="/usr/local/ispc/bin/ispc"
 ENV GLIBCXX_USE_CXX11_ABI=ON
+ENV VULKAN_LIBRARY="/usr/lib/aarch64-linux-gnu/libvulkan.so.1"
+ENV VULKAN_INCLUDE_DIR="/usr/lib/aarch64-linux-gnu"
 ENV BUILD_FILAMENT_FROM_SOURCE=ON
 ENV BUILD_JUPYTER_EXTENSION=ON
 ENV BUILD_PYTHON_MODULE=ON
+ENV Python3_EXECUTABLE="/usr/bin/python3"
 ENV CMAKE_INSTALL_PREFIX="~/open3d_install"
-ENV DBUILD_TENSORFLOW_OPS=OFF
+ENV BUILD_TENSORFLOW_OPS=OFF
 ENV Tensorflow_FRAMEWORK_LIB="/usr/local/lib/python3.8/dist-packages/tensorflow_core/libtensorflow_framework.so.1"
 ENV BUILD_PYTORCH_OPS=OFF
 ENV OPEN3D_ML_ROOT="/root/Open3D-ML"
 ENV BUNDLE_OPEN3D_ML=OFF
-ENV BUILD_LIBREALSENSE=OFF
+ENV BUILD_LIBREALSENSE=ON
 
 # build open3d with GPU
 RUN mkdir build \
  && cd build \
- && cmake VERBOSE=1 \
+ && cmake \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DBUILD_SYCL_MODULE=${BUILD_SYCL_MODULE} \
@@ -269,16 +288,19 @@ RUN mkdir build \
     -DBUILD_ISPC_MODULE=${BUILD_ISPC_MODULE} \
     -DCMAKE_ISPC_COMPILER:PATH=${CMAKE_ISPC_COMPILER} \
     -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+    -DVULKAN_LIBRARY=${VULKAN_LIBRARY} \
+    -DVULKAN_INCLUDE_DIR=${VULKAN_INCLUDE_DIR} \
     -DBUILD_FILAMENT_FROM_SOURCE=${BUILD_FILAMENT_FROM_SOURCE} \
     -DBUILD_CUDA_MODULE=OFF \
-    # -DBUILD_TENSORFLOW_OPS=ON \
-    # -DTensorflow_FRAMEWORK_LIB:PATH=${Tensorflow_FRAMEWORK_LIB} \
-    # -DBUILD_PYTORCH_OPS=ON \
-    # -DOPEN3D_ML_ROOT:PATH=${OPEN3D_ML_ROOT} \
-    # -DBUNDLE_OPEN3D_ML=ON \
+    -DBUILD_TENSORFLOW_OPS=${BUILD_TENSORFLOW_OPS} \
+    -DTensorflow_FRAMEWORK_LIB:PATH=${Tensorflow_FRAMEWORK_LIB} \
+    -DBUILD_PYTORCH_OPS=${BUILD_PYTORCH_OPS} \
+    -DOPEN3D_ML_ROOT:PATH=${OPEN3D_ML_ROOT} \
+    -DBUNDLE_OPEN3D_ML=${BUNDLE_OPEN3D_ML} \
     -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
-    #-DBUILD_LIBREALSENSE=ON \
+    -DPython3_EXECUTABLE=${Python3_EXECUTABLE} \
+    -DBUILD_LIBREALSENSE=${BUILD_LIBREALSENSE} \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
     .. \
  && make -j${NPROC}
@@ -292,7 +314,7 @@ RUN rm -r ${OPEN3D_ROOT}/build/bin \
 
 # build with GPU enabled
 WORKDIR ${OPEN3D_ROOT}/build
-RUN cmake VERBOSE=1 \
+RUN cmake \
     -DUSE_BLAS=${USE_BLAS} \
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DBUILD_SYCL_MODULE=${BUILD_SYCL_MODULE} \
@@ -311,20 +333,27 @@ RUN cmake VERBOSE=1 \
     -DBUILD_ISPC_MODULE=${BUILD_ISPC_MODULE} \
     -DCMAKE_ISPC_COMPILER:PATH=${CMAKE_ISPC_COMPILER} \
     -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
+    -DVULKAN_LIBRARY=${VULKAN_LIBRARY} \
+    -DVULKAN_INCLUDE_DIR=${VULKAN_INCLUDE_DIR} \
     -DBUILD_FILAMENT_FROM_SOURCE=${BUILD_FILAMENT_FROM_SOURCE} \
-    # -DBUILD_TENSORFLOW_OPS=ON \
-    # -DTensorflow_FRAMEWORK_LIB:PATH=${Tensorflow_FRAMEWORK_LIB} \
-    # -DBUILD_PYTORCH_OPS=ON \
-    # -DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
-    # -DBUNDLE_OPEN3D_ML=ON \
+    -DBUILD_TENSORFLOW_OPS=${BUILD_TENSORFLOW_OPS} \
+    -DTensorflow_FRAMEWORK_LIB:PATH=${Tensorflow_FRAMEWORK_LIB} \
+    -DBUILD_PYTORCH_OPS=${BUILD_PYTORCH_OPS} \
+    -DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
+    -DBUNDLE_OPEN3D_ML=${BUNDLE_OPEN3D_ML} \
     -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
-    #-DBUILD_LIBREALSENSE=ON \
+    -DPython3_EXECUTABLE=${Python3_EXECUTABLE} \
+    -DBUILD_LIBREALSENSE=${BUILD_LIBREALSENSE} \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
     .. \
  && make -j${NPROC} \
  && make install-pip-package -j${NPROC} \
  && make install -j${NPROC}
 # && pyenv rehash
+
+# Preload shared object
+# ENV LD_PRELOAD="/root/Open3D/build/lib/Release/libOpen3D.so"
+
 WORKDIR ${OPEN3D_ROOT}
 RUN cp build/lib/python_package/pip_package/*.whl /
