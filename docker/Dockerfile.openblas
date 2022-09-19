@@ -20,12 +20,10 @@ RUN apt-get update && apt-get install -y \
 RUN sudo update-ca-certificates -f
 
 # Required build args, should be specified in docker_build.sh
-ARG CONDA_SUFFIX
 ARG CMAKE_VERSION
 ARG PYTHON_VERSION
 ARG DEVELOPER_BUILD
-RUN if [ -z "${CONDA_SUFFIX}"    ]; then echo "Error: ARG CONDA_SUFFIX    not specified."; exit 1; fi \
- && if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not specified."; exit 1; fi \
+RUN if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not specified."; exit 1; fi \
  && if [ -z "${PYTHON_VERSION}"  ]; then echo "Error: ARG PYTHON_VERSION  not specified."; exit 1; fi \
  && if [ -z "${DEVELOPER_BUILD}" ]; then echo "Error: ARG DEVELOPER_BUILD not specified."; exit 1; fi
 
