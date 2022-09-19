@@ -89,7 +89,7 @@ print_usage_and_exit_docker_build() {
 openblas_print_env() {
     echo "[openblas_print_env()] DOCKER_TAG: ${DOCKER_TAG}"
     echo "[openblas_print_env()] BASE_IMAGE: ${BASE_IMAGE}"
-    echo "[openblas_print_env()] CONDA_SUFFIX: ${CONDA_SUFFIX}"
+    # echo "[openblas_print_env()] CONDA_SUFFIX: ${CONDA_SUFFIX}"
     echo "[openblas_print_env()] CMAKE_VERSION: ${CMAKE_VERSION}"
     echo "[openblas_print_env()] PYTHON_VERSION: ${PYTHON_VERSION}"
     echo "[openblas_print_env()] DEVELOPER_BUILD: ${DEVELOPER_BUILD}"
