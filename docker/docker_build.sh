@@ -89,6 +89,7 @@ print_usage_and_exit_docker_build() {
 openblas_print_env() {
     echo "[openblas_print_env()] DOCKER_TAG: ${DOCKER_TAG}"
     echo "[openblas_print_env()] BASE_IMAGE: ${BASE_IMAGE}"
+    echo "[openblas_print_env()] CONDA_SUFFIX: ${CONDA_SUFFIX}"
     echo "[openblas_print_env()] CMAKE_VERSION: ${CMAKE_VERSION}"
     echo "[openblas_print_env()] PYTHON_VERSION: ${PYTHON_VERSION}"
     echo "[openblas_print_env()] DEVELOPER_BUILD: ${DEVELOPER_BUILD}"
@@ -102,11 +103,17 @@ openblas_export_env() {
         echo "[openblas_export_env()] platform AMD64"
         export DOCKER_TAG=open3d-ci:openblas-amd64
         export BASE_IMAGE=ubuntu:18.04
+        export CONDA_SUFFIX=x86_64
         export CMAKE_VERSION=${CMAKE_VERSION}
     elif [[ "arm64" =~ ^($options)$ ]]; then
         echo "[openblas_export_env()] platform ARM64"
         export DOCKER_TAG=open3d-ci:openblas-arm64
+<<<<<<< HEAD
         export BASE_IMAGE=jetpack:r35.1.0
+=======
+        export BASE_IMAGE=arm64v8/ubuntu:18.04
+        export CONDA_SUFFIX=aarch64
+>>>>>>> c074f5d00b5bdf37266f71a87125156b1087ac98
         export CMAKE_VERSION=${CMAKE_VERSION_AARCH64}
     else
         echo "Invalid platform."
@@ -153,6 +160,7 @@ openblas_build() {
     docker build \
         --progress plain \
         --build-arg BASE_IMAGE="${BASE_IMAGE}" \
+        --build-arg CONDA_SUFFIX="${CONDA_SUFFIX}" \
         --build-arg CMAKE_VERSION="${CMAKE_VERSION}" \
         --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
         --build-arg DEVELOPER_BUILD="${DEVELOPER_BUILD}" \

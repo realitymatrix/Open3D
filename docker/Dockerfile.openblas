@@ -20,10 +20,12 @@ RUN apt-get update && apt-get install -y \
 RUN sudo update-ca-certificates -f
 
 # Required build args, should be specified in docker_build.sh
+ARG CONDA_SUFFIX
 ARG CMAKE_VERSION
 ARG PYTHON_VERSION
 ARG DEVELOPER_BUILD
-RUN if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not specified."; exit 1; fi \
+RUN if [ -z "${CONDA_SUFFIX}"    ]; then echo "Error: ARG CONDA_SUFFIX    not specified."; exit 1; fi \
+ && if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not specified."; exit 1; fi \
  && if [ -z "${PYTHON_VERSION}"  ]; then echo "Error: ARG PYTHON_VERSION  not specified."; exit 1; fi \
  && if [ -z "${DEVELOPER_BUILD}" ]; then echo "Error: ARG DEVELOPER_BUILD not specified."; exit 1; fi
 
@@ -55,6 +57,7 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     apt-transport-https \
     build-essential \
+<<<<<<< HEAD
     apt-utils \
     clang-10 \
     llvm-10-dev \
@@ -126,6 +129,22 @@ RUN apt-get update -y && apt-get install -y \
 # RUN git clone --depth=1 https://github.com/pyenv/pyenv.git /root/.pyenv
 # ENV PYENV_ROOT="/root/.pyenv"
 # ENV PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
+=======
+    git \
+ && rm -rf /var/lib/apt/lists/*
+
+# Miniconda
+ENV PATH="/root/miniconda3/bin:${PATH}"
+RUN wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${CONDA_SUFFIX}.sh \
+ && bash Miniconda3-latest-Linux-${CONDA_SUFFIX}.sh -b \
+ && rm Miniconda3-latest-Linux-${CONDA_SUFFIX}.sh \
+ && conda --version
+ENV PATH="/root/miniconda3/envs/open3d/bin:${PATH}"
+RUN conda create -y -n open3d python=${PYTHON_VERSION} \
+ && source activate open3d
+RUN which python \
+ && python --version
+>>>>>>> c074f5d00b5bdf37266f71a87125156b1087ac98
 
 # CMake
 # PWD is /, cmake will be installed to /root/${CMAKE_VERSION}/bin/cmake
@@ -150,10 +169,18 @@ RUN ispc --support-matrix
 COPY ./util/install_deps_ubuntu.sh /root/Open3D/util/
 RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
  && rm -rf /var/lib/apt/lists/*
+RUN echo ${PATH} \
+ && echo "gcc=$(which gcc)" \
+ && gcc --version \
+ && echo "g++=$(which g++)" \
+ && g++ --version
 
 # Python and dependencies
+<<<<<<< HEAD
 # RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
 # RUN pyenv global $(pyenv versions | grep ${PYTHON_VERSION})
+=======
+>>>>>>> c074f5d00b5bdf37266f71a87125156b1087ac98
 COPY ./python/requirements*.txt /root/Open3D/python/
 RUN which python3 \
  && python3 --version \
@@ -303,6 +330,7 @@ RUN mkdir build \
     -DBUILD_LIBREALSENSE=${BUILD_LIBREALSENSE} \
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
     .. \
+<<<<<<< HEAD
  && make -j${NPROC}
 
 RUN rm -r ${OPEN3D_ROOT}/build/bin \
@@ -356,4 +384,9 @@ RUN cmake \
 # ENV LD_PRELOAD="/root/Open3D/build/lib/Release/libOpen3D.so"
 
 WORKDIR ${OPEN3D_ROOT}
+=======
+ && make -j$(nproc) \
+ && make install-pip-package -j$(nproc) \
+ && make install -j$(nproc)
+>>>>>>> c074f5d00b5bdf37266f71a87125156b1087ac98
 RUN cp build/lib/python_package/pip_package/*.whl /
