@@ -103,7 +103,7 @@ openblas_export_env() {
         echo "[openblas_export_env()] platform AMD64"
         export DOCKER_TAG=open3d-ci:openblas-amd64
         export BASE_IMAGE=ubuntu:18.04
-        export CONDA_SUFFIX=x86_64
+        # export CONDA_SUFFIX=x86_64
         export CMAKE_VERSION=${CMAKE_VERSION}
     elif [[ "arm64" =~ ^($options)$ ]]; then
         echo "[openblas_export_env()] platform ARM64"
@@ -155,7 +155,7 @@ openblas_build() {
     docker build \
         --progress plain \
         --build-arg BASE_IMAGE="${BASE_IMAGE}" \
-        --build-arg CONDA_SUFFIX="${CONDA_SUFFIX}" \
+        # --build-arg CONDA_SUFFIX="${CONDA_SUFFIX}" \
         --build-arg CMAKE_VERSION="${CMAKE_VERSION}" \
         --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
         --build-arg DEVELOPER_BUILD="${DEVELOPER_BUILD}" \
