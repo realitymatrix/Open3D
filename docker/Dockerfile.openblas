@@ -20,10 +20,12 @@ RUN apt-get update && apt-get install -y \
 RUN sudo update-ca-certificates -f
 
 # Required build args, should be specified in docker_build.sh
+ARG CONDA_SUFFIX
 ARG CMAKE_VERSION
 ARG PYTHON_VERSION
 ARG DEVELOPER_BUILD
-RUN if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not specified."; exit 1; fi \
+RUN if [ -z "${CONDA_SUFFIX}"    ]; then echo "Error: ARG CONDA_SUFFIX    not specified."; exit 1; fi \
+ && if [ -z "${CMAKE_VERSION}"   ]; then echo "Error: ARG CMAKE_VERSION   not specified."; exit 1; fi \
  && if [ -z "${PYTHON_VERSION}"  ]; then echo "Error: ARG PYTHON_VERSION  not specified."; exit 1; fi \
  && if [ -z "${DEVELOPER_BUILD}" ]; then echo "Error: ARG DEVELOPER_BUILD not specified."; exit 1; fi
 
@@ -150,6 +152,11 @@ RUN ispc --support-matrix
 COPY ./util/install_deps_ubuntu.sh /root/Open3D/util/
 RUN /root/Open3D/util/install_deps_ubuntu.sh assume-yes \
  && rm -rf /var/lib/apt/lists/*
+RUN echo ${PATH} \
+ && echo "gcc=$(which gcc)" \
+ && gcc --version \
+ && echo "g++=$(which g++)" \
+ && g++ --version
 
 # Python and dependencies
 # RUN pyenv install $(pyenv install --list | sort -r --version-sort | grep -m1 "^ *${PYTHON_VERSION}\.")
@@ -296,50 +303,6 @@ RUN mkdir build \
     -DTensorflow_FRAMEWORK_LIB:PATH=${Tensorflow_FRAMEWORK_LIB} \
     -DBUILD_PYTORCH_OPS=${BUILD_PYTORCH_OPS} \
     -DOPEN3D_ML_ROOT:PATH=${OPEN3D_ML_ROOT} \
-    -DBUNDLE_OPEN3D_ML=${BUNDLE_OPEN3D_ML} \
-    -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
-    -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
-    -DPython3_EXECUTABLE=${Python3_EXECUTABLE} \
-    -DBUILD_LIBREALSENSE=${BUILD_LIBREALSENSE} \
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
-    .. \
- && make -j${NPROC}
-
-RUN rm -r ${OPEN3D_ROOT}/build/bin \
- && rm -r ${OPEN3D_ROOT}/build/cpp \
- && rm -r ${OPEN3D_ROOT}/build/lib/Release/*.a \
- && rm -r ${OPEN3D_ROOT}/build/lib/_build_config.py.in
-#  && rm -r ${OPEN3D_ROOT}/build/lib/ml
-
-
-# build with GPU enabled
-WORKDIR ${OPEN3D_ROOT}/build
-RUN cmake \
-    -DUSE_BLAS=${USE_BLAS} \
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DBUILD_SYCL_MODULE=${BUILD_SYCL_MODULE} \
-    -DBUILD_UNIT_TESTS=${BUILD_UNIT_TESTS} \
-    -DBUILD_EXAMPLES=${BUILD_EXAMPLES} \
-    -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
-    -DBUILD_GUI=${BUILD_GUI} \
-    -DBUILD_WEBRTC=${BUILD_WEBRTC} \
-    -DBUILD_WEBRTC_FROM_SOURCE=${BUILD_WEBRTC_FROM_SOURCE} \
-    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} \
-    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
-    -DUSE_SYSTEM_JPEG=${USE_SYSTEM_JPEG} \
-    -DBUILD_CUDA_MODULE=${BUILD_CUDA_MODULE} \
-    -DBUILD_COMMON_CUDA_ARCHS=${BUILD_COMMON_CUDA_ARCHS} \
-    -DCMAKE_CUDA_COMPILER:PATH=${CMAKE_CUDA_COMPILER} \
-    -DBUILD_ISPC_MODULE=${BUILD_ISPC_MODULE} \
-    -DCMAKE_ISPC_COMPILER:PATH=${CMAKE_ISPC_COMPILER} \
-    -DGLIBCXX_USE_CXX11_ABI=${GLIBCXX_USE_CXX11_ABI} \
-    -DVULKAN_LIBRARY=${VULKAN_LIBRARY} \
-    -DVULKAN_INCLUDE_DIR=${VULKAN_INCLUDE_DIR} \
-    -DBUILD_FILAMENT_FROM_SOURCE=${BUILD_FILAMENT_FROM_SOURCE} \
-    -DBUILD_TENSORFLOW_OPS=${BUILD_TENSORFLOW_OPS} \
-    -DTensorflow_FRAMEWORK_LIB:PATH=${Tensorflow_FRAMEWORK_LIB} \
-    -DBUILD_PYTORCH_OPS=${BUILD_PYTORCH_OPS} \
-    -DOPEN3D_ML_ROOT=${OPEN3D_ML_ROOT} \
     -DBUNDLE_OPEN3D_ML=${BUNDLE_OPEN3D_ML} \
     -DBUILD_JUPYTER_EXTENSION=${BUILD_JUPYTER_EXTENSION} \
     -DBUILD_PYTHON_MODULE=${BUILD_PYTHON_MODULE} \
