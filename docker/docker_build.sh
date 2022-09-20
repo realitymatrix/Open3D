@@ -105,7 +105,7 @@ openblas_export_env() {
         export CMAKE_VERSION=${CMAKE_VERSION}
     elif [[ "arm64" =~ ^($options)$ ]]; then
         echo "[openblas_export_env()] platform ARM64"
-        export DOCKER_TAG=open3d-ci:openblas-arm64-py38-release
+        export DOCKER_TAG=open3d-ci:openblas-arm64
         export BASE_IMAGE=jetpack:r35.1.0
         export CMAKE_VERSION=${CMAKE_VERSION_AARCH64}
     else
