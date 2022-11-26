@@ -107,6 +107,7 @@ The attributes of the triangle mesh have different levels::
                  "vertex_positions"_a, "triangle_indices"_a)
             .def("__repr__", &TriangleMesh::ToString);
 
+    py::detail::bind_copy_functions<TriangleMesh>(triangle_mesh);
     // Pickle support.
     triangle_mesh.def(py::pickle(
             [](const TriangleMesh& mesh) {
@@ -194,6 +195,20 @@ The attributes of the triangle mesh have different levels::
                       "Scale points.");
     triangle_mesh.def("rotate", &TriangleMesh::Rotate, "R"_a, "center"_a,
                       "Rotate points and normals (if exist).");
+
+    triangle_mesh.def(
+            "normalize_normals", &TriangleMesh::NormalizeNormals,
+            "Normalize both triangle normals and vertex normals to length 1.");
+    triangle_mesh.def("compute_triangle_normals",
+                      &TriangleMesh::ComputeTriangleNormals,
+                      "Function to compute triangle normals, usually called "
+                      "before rendering.",
+                      "normalized"_a = true);
+    triangle_mesh.def("compute_vertex_normals",
+                      &TriangleMesh::ComputeVertexNormals,
+                      "Function to compute vertex normals, usually called "
+                      "before rendering.",
+                      "normalized"_a = true);
 
     triangle_mesh.def(
             "compute_convex_hull", &TriangleMesh::ComputeConvexHull,
