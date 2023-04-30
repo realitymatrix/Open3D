@@ -52,8 +52,9 @@ endif()
 ExternalProject_Add(
     ext_turbojpeg
     PREFIX turbojpeg
-    URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/2.1.1.tar.gz
-    URL_HASH SHA256=20e9cd3e5f517950dfb7a300ad344543d88719c254407ffb5ad88d891bf701c4
+    URL
+    https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/2.1.5.1.tar.gz
+    URL_HASH SHA256=61846251941e5791005fb7face196eec24541fce04f12570c308557529e92c75
     DOWNLOAD_DIR "${OPEN3D_THIRD_PARTY_DOWNLOAD_DIR}/libjpeg-turbo"
     UPDATE_COMMAND ""
     CMAKE_ARGS
